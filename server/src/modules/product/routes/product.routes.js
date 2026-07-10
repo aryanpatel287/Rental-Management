@@ -2,6 +2,10 @@ import { Router } from 'express';
 import * as productController from '../controllers/product.controller.js';
 import { protect, restrictTo } from '../../auth/index.js';
 import { createProductValidator, updateProductValidator } from '../validators/product.validators.js';
+import { createProductImageValidator } from '../validators/product-image.validators.js';
+import * as productImageController from '../controllers/product-image.controller.js';
+import { createVariantValidator } from '../validators/variant.validators.js';
+import * as variantController from '../controllers/variant.controller.js';
 
 import { verifyToken } from '../../auth/utils/jwt.js';
 import { getUserById } from '../../../dao/user.dao.js';
@@ -40,5 +44,13 @@ router.delete('/:id', protect, restrictTo('ADMIN', 'VENDOR'), productController.
 // Publishing Routes
 router.patch('/:id/publish', protect, restrictTo('ADMIN', 'VENDOR'), productController.publishProduct);
 router.patch('/:id/unpublish', protect, restrictTo('ADMIN', 'VENDOR'), productController.unpublishProduct);
+
+// Product Images Routes
+router.post('/:productId/images', protect, restrictTo('ADMIN', 'VENDOR'), createProductImageValidator, productImageController.uploadProductImage);
+router.delete('/:productId/images/:imageId', protect, restrictTo('ADMIN', 'VENDOR'), productImageController.deleteProductImage);
+
+// Product Variants Routes
+router.get('/:productId/variants', variantController.getVariants);
+router.post('/:productId/variants', protect, restrictTo('ADMIN', 'VENDOR'), createVariantValidator, variantController.createVariant);
 
 export default router;

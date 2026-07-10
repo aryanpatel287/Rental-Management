@@ -5,6 +5,8 @@ import { products } from './products.schema.js';
 import { productVariants } from './variants.schema.js';
 import { inventory } from './inventory.schema.js';
 import { rentalRates } from './rental-rates.schema.js';
+import { productImages } from './product-images.schema.js';
+import { attributes, attributeValues } from './attributes.schema.js';
 
 export { 
     users, 
@@ -14,6 +16,9 @@ export {
     products, 
     productVariants, 
     inventory, 
-    rentalRates 
+    rentalRates,
+    productImages,
+    attributes,
+    attributeValues
 };
 

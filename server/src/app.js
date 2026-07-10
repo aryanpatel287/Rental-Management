@@ -8,6 +8,8 @@ import { crudRouter } from './modules/crud/index.js';
 import { dashboardRouter } from './modules/dashboard/index.js';
 import { categoryRouter } from './modules/category/index.js';
 import { productRouter } from './modules/product/index.js';
+import variantRouter from './modules/product/routes/variant.routes.js';
+import { attributeRouter } from './modules/attribute/index.js';
 
 const app = express();
 
@@ -31,5 +33,7 @@ app.use('/api/crud', crudRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/products', productRouter);
+app.use('/api/variants', variantRouter);
+app.use('/api/attributes', attributeRouter);
 
 export default app;
