@@ -12,6 +12,7 @@ import { auditLogs } from './audit-logs.schema.js';
 import { rentalOrders, rentalOrderItems } from './orders.schema.js';
 import { quotations, quotationItems } from './quotations.schema.js';
 import { carts, cartItems } from './carts.schema.js';
+import { coupons, couponUsages } from './coupons.schema.js';
 
 export { 
     users, 
@@ -32,7 +33,9 @@ export {
     quotations,
     quotationItems,
     carts,
-    cartItems
+    cartItems,
+    coupons,
+    couponUsages
 };
 
 
