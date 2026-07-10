@@ -21,7 +21,7 @@ export async function register({ name, email, password }) {
     const user = await createUser({
         name,
         email,
-        passwordHash,
+        password: passwordHash,
         role: 'USER',
         emailVerified: false,
         isActive: true,
@@ -46,7 +46,7 @@ export async function login({ email, password }) {
         throw new AppError('Your account has been deactivated. Please contact support.', 401);
     }
 
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
         throw new AppError('Invalid email or password', 401);
     }

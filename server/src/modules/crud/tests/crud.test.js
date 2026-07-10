@@ -47,7 +47,7 @@ describe('CRUD Engine Module Integration Tests', () => {
         await db.insert(users).values({
             name: adminUser.name,
             email: adminUser.email,
-            passwordHash: await bcrypt.hash(adminUser.password, salt),
+            password: await bcrypt.hash(adminUser.password, salt),
             role: 'ADMIN',
             emailVerified: true
         });
@@ -55,7 +55,7 @@ describe('CRUD Engine Module Integration Tests', () => {
         await db.insert(users).values({
             name: normalUser.name,
             email: normalUser.email,
-            passwordHash: await bcrypt.hash(normalUser.password, salt),
+            password: await bcrypt.hash(normalUser.password, salt),
             role: 'USER',
             emailVerified: true
         });
