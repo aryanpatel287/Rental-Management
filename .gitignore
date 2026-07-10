@@ -39,3 +39,4 @@ pnpm-debug.log*
 # Local schema database files
 schema.db
 *.db
+skills
