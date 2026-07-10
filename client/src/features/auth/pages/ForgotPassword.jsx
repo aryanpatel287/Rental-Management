@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
 
 import FormGroup from '../components/FormGroup';
+import PasswordMeter from '../components/PasswordMeter';
 import { useAuth } from '../hooks/useAuth';
 import {
     validateEmail,
@@ -146,7 +147,9 @@ const ResetPasswordFields = ({
             hasError={Boolean(touched.password && errors.password)}
             errorMessage={touched.password ? errors.password : ''}
             disabled={loading}
-        />
+        >
+            <PasswordMeter password={formValues.password} />
+        </FormGroup>
         <FormGroup
             label="Confirm password"
             id="confirmPassword"
@@ -338,48 +341,62 @@ const ForgotPassword = () => {
     };
 
     return (
-        <main className="auth-page auth-page--forgot-password">
-            <div className="form-container auth-form-container auth-form-container--forgot-password">
-                <div className="form-header">
-                    <h1 className="form-title">Forgot password</h1>
-                    <p className="forgot-password-copy">{getStepCopy(step)}</p>
+        <main className="auth-page auth-page--split">
+            <div className="auth-hero-pane">
+                <div className="auth-hero-content">
+                    <div className="auth-hero-logo">
+                        <svg className="auth-hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
+                    <h2 className="auth-hero-title">RentalHub</h2>
+                    <p className="auth-hero-tagline">Seamless rental management, from quotation to checkout.</p>
                 </div>
+            </div>
 
-                <StatusBanner
-                    message={error || statusMessage}
-                    statusType={error ? 'error' : statusType}
-                />
+            <div className="auth-form-pane">
+                <section className="auth-form-card">
+                    <div className="form-header">
+                        <h1 className="form-title">Forgot password</h1>
+                        <p className="forgot-password-copy">{getStepCopy(step)}</p>
+                    </div>
 
-                <form
-                    onSubmit={
-                        step === 'request'
-                            ? handleRequestOtp
-                            : handleResetPasswordSubmit
-                    }
-                    noValidate
-                >
-                    <ForgotPasswordFields
-                        step={step}
-                        formValues={formValues}
-                        errors={errors}
-                        touched={touched}
-                        onChange={handleFieldChange}
-                        onBlur={handleBlur}
-                        loading={isSubmitting}
+                    <StatusBanner
+                        message={error || statusMessage}
+                        statusType={error ? 'error' : statusType}
                     />
 
-                    <button
-                        className="btn btn-auth-submit"
-                        type="submit"
-                        disabled={isSubmitting}
+                    <form
+                        onSubmit={
+                            step === 'request'
+                                ? handleRequestOtp
+                                : handleResetPasswordSubmit
+                        }
+                        noValidate
                     >
-                        {getSubmitLabel(step, isSubmitting)}
-                    </button>
-                </form>
+                        <ForgotPasswordFields
+                            step={step}
+                            formValues={formValues}
+                            errors={errors}
+                            touched={touched}
+                            onChange={handleFieldChange}
+                            onBlur={handleBlur}
+                            loading={isSubmitting}
+                        />
 
-                <p className="form-footer">
-                    <Link to="/login">Back to login</Link>
-                </p>
+                        <button
+                            className="btn btn-auth-submit"
+                            type="submit"
+                            disabled={isSubmitting}
+                        >
+                            {getSubmitLabel(step, isSubmitting)}
+                        </button>
+                    </form>
+
+                    <p className="form-footer">
+                        <Link className="auth-link" to="/login">Back to login</Link>
+                    </p>
+                </section>
             </div>
         </main>
     );

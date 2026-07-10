@@ -24,7 +24,7 @@
 
         &:focus {
             outline: none;
-            border-color: var(--primary);
+            border: 1px solid var(--primary);
             background-color: var(--bg-card);
             box-shadow: 0 0 0 3px var(--primary-faint);
 
@@ -42,7 +42,7 @@
         font-size: var(--font-size-base);
         font-weight: var(--font-weight-medium);
         color: var(--text-muted);
-        background-color: var(--bg-card);
+        background-color: transparent;
         padding: 0 6px;
         pointer-events: none;
         transition: var(--transition-smooth);
@@ -50,15 +50,19 @@
     }
 
     .form-input:focus ~ .form-label,
-    .form-input:not(:placeholder-shown) ~ .form-label {
+    .form-input:not(:placeholder-shown) ~ .form-label,
+    .form-input:-webkit-autofill ~ .form-label {
         top: 0;
         font-size: var(--font-size-caption);
         font-weight: var(--font-weight-bold);
         color: var(--primary);
+        background-color: var(--bg-card);
     }
 
-    .form-input:not(:focus):not(:placeholder-shown) ~ .form-label {
+    .form-input:not(:focus):not(:placeholder-shown) ~ .form-label,
+    .form-input:not(:focus):-webkit-autofill ~ .form-label {
         color: var(--text-muted);
+        background-color: var(--bg-card);
     }
 
     &.has-password {
@@ -100,11 +104,11 @@
 
     &.error {
         .form-input {
-            border-color: var(--danger);
+            border: 1px solid var(--danger);
             box-shadow: 0 0 0 3px var(--danger-bg);
 
             &:focus {
-                border-color: var(--danger);
+                border: 1px solid var(--danger);
                 box-shadow: 0 0 0 4px var(--danger-bg);
             }
         }
