@@ -15,6 +15,8 @@ const FormGroup = ({
   onBlur,
   onFocus,
   disabled = false,
+  autoComplete,
+  children,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputRef = useRef(null);
@@ -48,6 +50,7 @@ const FormGroup = ({
         aria-invalid={hasError ? 'true' : 'false'}
         aria-describedby={errorMessage ? `${id}-error` : undefined}
         disabled={disabled}
+        autoComplete={autoComplete}
       />
 
       {isPassword && (
@@ -65,6 +68,8 @@ const FormGroup = ({
       <label className="form-label" htmlFor={id}>
         {label}
       </label>
+
+      {children}
 
       {errorMessage ? (
         <p className="form-error" id={`${id}-error`}>

@@ -5,7 +5,7 @@
   background-color: var(--bg-card);
   color: var(--text-main);
   font-size: 15px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border-color);
   border-radius: var(--rounded-md);
   outline: none;
   transition: border-width var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
@@ -15,22 +15,18 @@
   }
 
   &:focus {
-    border: 2px solid var(--text-main);
-    padding-top: 11px;
-    padding-bottom: 11px;
-    padding-left: 15px;
-    padding-right: 15px;
+    border: 1px solid var(--primary);
+    outline: none;
+    padding: 12px 16px;
   }
 
   &--error {
     border: 1px solid var(--danger);
     
     &:focus {
-      border: 2px solid var(--danger);
-      padding-top: 11px;
-      padding-bottom: 11px;
-      padding-left: 15px;
-      padding-right: 15px;
+      border: 1px solid var(--danger);
+      outline: none;
+      padding: 12px 16px;
     }
   }
 }

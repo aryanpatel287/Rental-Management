@@ -262,7 +262,7 @@
   height: 32px;
   padding: 0 8px;
   background-color: var(--bg-card);
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   font-size: 12px;
   color: var(--text-main);
@@ -271,7 +271,8 @@
   transition: border-color var(--transition-smooth);
 
   &:focus {
-    border-color: var(--text-main);
+    border-color: var(--primary);
+    outline: none;
   }
 }
 

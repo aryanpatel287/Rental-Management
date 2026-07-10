@@ -188,10 +188,22 @@ const Register = () => {
     };
 
     return (
-        <main className="auth-page auth-page--register">
-            <section className="form-container auth-form-container auth-form-container--register register-form-container">
-                <div className="auth-branding">
-                    <div className="auth-copy">
+        <main className="auth-page auth-page--split">
+            <div className="auth-hero-pane">
+                <div className="auth-hero-content">
+                    <div className="auth-hero-logo">
+                        <svg className="auth-hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
+                    <h2 className="auth-hero-title">RentalHub</h2>
+                    <p className="auth-hero-tagline">Seamless rental management, from quotation to checkout.</p>
+                </div>
+            </div>
+
+            <div className="auth-form-pane">
+                <section className="auth-form-card">
+                    <div className="form-header">
                         <p className="auth-eyebrow">New account</p>
                         <h1 className="form-title">Create your workspace</h1>
                         <p className="form-subtitle">
@@ -199,96 +211,84 @@ const Register = () => {
                             quick steps.
                         </p>
                     </div>
-                </div>
 
-                {toast.visible && (
-                    <div
-                        className={`toast-banner ${toast.type === 'error' ? 'is-error' : 'is-success'}`}
-                        role="status"
-                        aria-live="polite"
-                    >
-                        {toast.message}
-                    </div>
-                )}
-
-                <form
-                    className="auth-form"
-                    onSubmit={handleFormSubmit}
-                    noValidate
-                >
-                    <FormGroup
-                        label="Username"
-                        id="username"
-                        name="username"
-                        type="text"
-                        value={formValues.username}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        disabled={isBusy}
-                        hasError={Boolean(touched.username && errors.username)}
-                        errorMessage={touched.username ? errors.username : ''}
-                    />
-                    <FormGroup
-                        label="Email"
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formValues.email}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        disabled={isBusy}
-                        hasError={Boolean(touched.email && errors.email)}
-                        errorMessage={touched.email ? errors.email : ''}
-                    />
-                    <FormGroup
-                        label="Password"
-                        id="password"
-                        name="password"
-                        type="password"
-                        value={formValues.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        disabled={isBusy}
-                        hasError={Boolean(touched.password && errors.password)}
-                        errorMessage={touched.password ? errors.password : ''}
-                    />
-                    <PasswordMeter password={formValues.password} />
-
-                    {/* {(passwordFocused || formValues.password.length > 0) && (
-                        <ul className="password-rules" aria-label="Password requirements">
-                            {passwordChecks.map((rule) => (
-                                <li
-                                    key={rule.label}
-                                    className={rule.valid ? 'is-valid' : ''}
-                                >
-                                    <span
-                                        className="password-rule-dot"
-                                        aria-hidden="true"
-                                    />
-                                    <span>{rule.label}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    )} */}
-
-                    <div className="auth-actions">
-                        <button
-                            className="btn btn-auth-submit auth-submit-btn"
-                            type="submit"
-                            disabled={isBusy}
+                    {toast.visible && (
+                        <div
+                            className={`toast-banner ${toast.type === 'error' ? 'is-error' : 'is-success'}`}
+                            role="status"
+                            aria-live="polite"
                         >
-                            {isBusy ? 'Registering...' : 'Register'}
-                        </button>
-                    </div>
-                </form>
+                            {toast.message}
+                        </div>
+                    )}
 
-                <p className="form-footer">
-                    Already have an account?{' '}
-                    <Link className="auth-link" to="/login">
-                        Login
-                    </Link>
-                </p>
-            </section>
+                    <form
+                        className="auth-form"
+                        onSubmit={handleFormSubmit}
+                        noValidate
+                        autoComplete="off"
+                    >
+                        <FormGroup
+                            label="Name"
+                            id="username"
+                            name="username"
+                            type="text"
+                            value={formValues.username}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled={isBusy}
+                            hasError={Boolean(touched.username && errors.username)}
+                            errorMessage={touched.username ? errors.username : ''}
+                            autoComplete="off"
+                        />
+                        <FormGroup
+                            label="Email"
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={formValues.email}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled={isBusy}
+                            hasError={Boolean(touched.email && errors.email)}
+                            errorMessage={touched.email ? errors.email : ''}
+                            autoComplete="off"
+                        />
+                        <FormGroup
+                            label="Password"
+                            id="password"
+                            name="password"
+                            type="password"
+                            value={formValues.password}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled={isBusy}
+                            hasError={Boolean(touched.password && errors.password)}
+                            errorMessage={touched.password ? errors.password : ''}
+                            autoComplete="new-password"
+                        >
+                            <PasswordMeter password={formValues.password} />
+                        </FormGroup>
+
+                        <div className="auth-actions">
+                            <button
+                                className="btn btn-auth-submit auth-submit-btn"
+                                type="submit"
+                                disabled={isBusy}
+                            >
+                                {isBusy ? 'Registering...' : 'Register'}
+                            </button>
+                        </div>
+                    </form>
+
+                    <p className="form-footer">
+                        Already have an account?{' '}
+                        <Link className="auth-link" to="/login">
+                            Login
+                        </Link>
+                    </p>
+                </section>
+            </div>
         </main>
     );
 };
