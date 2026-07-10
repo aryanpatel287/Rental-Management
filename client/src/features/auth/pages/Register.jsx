@@ -46,6 +46,12 @@ const Register = () => {
     const navigate = useNavigate();
     const { handleRegister } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [shake, setShake] = useState(false);
+
+    const triggerShake = () => {
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+    };
 
     useEffect(() => {
         if (!toast.visible) {
@@ -130,6 +136,7 @@ const Register = () => {
         e.preventDefault();
 
         if (!validateForm()) {
+            triggerShake();
             return;
         }
 
@@ -158,6 +165,8 @@ const Register = () => {
             });
             return;
         }
+
+        triggerShake();
 
         const nextErrors = createInitialErrors();
 
@@ -272,7 +281,7 @@ const Register = () => {
 
                         <div className="auth-actions">
                             <button
-                                className="btn btn-auth-submit auth-submit-btn"
+                                className={`btn btn-auth-submit auth-submit-btn ${shake ? 'btn-shake' : ''}`}
                                 type="submit"
                                 disabled={isBusy}
                             >

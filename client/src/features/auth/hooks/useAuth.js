@@ -59,11 +59,14 @@ export const useAuth = () => {
             if (data?.user) {
                 setUser(data.user);
                 sessionStorage.setItem('user', JSON.stringify(data.user));
+                return { success: true, user: data.user };
             } else {
                 throw new Error(data?.message || 'Login Failed');
             }
-        } catch (error) {
-            setError(data?.message || 'Login Failed');
+        } catch (err) {
+            const message = err?.response?.data?.message || err?.message || 'Login Failed';
+            setError(message);
+            return { success: false, message };
         } finally {
             setLoading(false);
         }
