@@ -43,6 +43,13 @@
       "when": 1783702545678,
       "tag": "0005_add_attributes",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783707817926,
+      "tag": "0006_fair_robin_chapel",
+      "breakpoints": true
     }
   ]
 }
