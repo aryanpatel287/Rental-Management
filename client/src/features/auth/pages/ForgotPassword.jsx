@@ -38,7 +38,7 @@ const createInitialTouched = (step = 'request') => ({
     confirmPassword: step === 'reset',
 });
 
-const normalizeOtpValue = (value) => value.replace(/\s+/g, '').toUpperCase();
+const normalizeOtpValue = (value) => value.replace(/\s+/g, '');
 
 const getFieldError = (fieldName, fieldValue, values = {}) => {
     if (fieldName === 'email') {
