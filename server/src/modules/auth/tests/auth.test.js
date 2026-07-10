@@ -105,7 +105,7 @@ describe('Authentication Module Integration Tests', () => {
             expect(res.body.data.user.name).toBe(testUser.name);
             expect(res.body.data.user.email).toBe(testUser.email);
             expect(res.body.data.user.role).toBe('USER');
-            expect(res.body.data.user.passwordHash).toBeUndefined();
+            expect(res.body.data.user.password).toBeUndefined();
             expect(res.headers['set-cookie']).toBeDefined();
             expect(res.headers['set-cookie'][0]).toContain('token=');
         });
@@ -136,7 +136,7 @@ describe('Authentication Module Integration Tests', () => {
             await db.insert(users).values({
                 name: testUser.name,
                 email: testUser.email,
-                passwordHash,
+                password: passwordHash,
                 role: 'USER',
             });
         });
@@ -185,7 +185,7 @@ describe('Authentication Module Integration Tests', () => {
             await db.insert(users).values({
                 name: testUser.name,
                 email: testUser.email,
-                passwordHash,
+                password: passwordHash,
                 role: 'USER',
             });
 
@@ -227,14 +227,14 @@ describe('Authentication Module Integration Tests', () => {
             await db.insert(users).values({
                 name: testUser.name,
                 email: testUser.email,
-                passwordHash: await bcrypt.hash(testUser.password, salt),
+                password: await bcrypt.hash(testUser.password, salt),
                 role: 'USER',
             });
 
             await db.insert(users).values({
                 name: testAdmin.name,
                 email: testAdmin.email,
-                passwordHash: await bcrypt.hash(testAdmin.password, salt),
+                password: await bcrypt.hash(testAdmin.password, salt),
                 role: 'ADMIN',
             });
 
@@ -307,7 +307,7 @@ describe('Authentication Module Integration Tests', () => {
             const [user] = await db.insert(users).values({
                 name: testUser.name,
                 email: testUser.email,
-                passwordHash,
+                password: passwordHash,
                 role: 'USER',
             }).returning();
             userId = user.id;

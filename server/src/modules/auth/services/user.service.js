@@ -36,7 +36,7 @@ export async function changePassword(userId, { currentPassword, newPassword }) {
         throw new AppError('User not found', 404);
     }
 
-    const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
         throw new AppError('Current password is incorrect', 400);
     }
@@ -44,7 +44,7 @@ export async function changePassword(userId, { currentPassword, newPassword }) {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(newPassword, salt);
 
-    await updateUser(userId, { passwordHash });
+    await updateUser(userId, { password: passwordHash });
 }
 
 /**

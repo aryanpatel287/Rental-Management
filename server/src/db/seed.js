@@ -11,7 +11,7 @@ async function seedUsers() {
         {
             name: 'Admin User',
             email: 'admin@example.com',
-            passwordHash,
+            password: passwordHash,
             role: 'ADMIN',
             emailVerified: true,
             isActive: true,
@@ -20,7 +20,7 @@ async function seedUsers() {
         ...Array.from({ length: 10 }, (_, i) => ({
             name: `User ${i + 1}`,
             email: `user${i + 1}@example.com`,
-            passwordHash,
+            password: passwordHash,
             role: 'USER',
             emailVerified: true,
             isActive: true,
