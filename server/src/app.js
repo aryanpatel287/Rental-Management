@@ -12,6 +12,7 @@ import variantRouter from './modules/product/routes/variant.routes.js';
 import { attributeRouter } from './modules/attribute/index.js';
 import { inventoryRouter } from './modules/inventory/index.js';
 import { availabilityRouter } from './modules/availability/index.js';
+import { cartRouter } from './modules/cart/index.js';
 
 const app = express();
 
@@ -39,5 +40,6 @@ app.use('/api/variants', variantRouter);
 app.use('/api/attributes', attributeRouter);
 app.use('/api/inventory', inventoryRouter);
 app.use('/api/reservations', availabilityRouter);
+app.use('/api/cart', cartRouter);
 
 export default app;
