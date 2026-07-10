@@ -21,6 +21,12 @@ const Login = () => {
         password: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [shake, setShake] = useState(false);
+
+    const triggerShake = () => {
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+    };
 
     const [touched, setTouched] = useState({
         email: false,
@@ -91,14 +97,21 @@ const Login = () => {
         setIsSubmitting(true);
 
         if (!validateForm()) {
+            triggerShake();
+            setIsSubmitting(false);
             return;
         }
 
         try {
-            await handleLogin({
+            const res = await handleLogin({
                 email: formValues.email,
                 password: formValues.password,
             });
+            if (res && !res.success) {
+                triggerShake();
+            }
+        } catch (err) {
+            triggerShake();
         } finally {
             setIsSubmitting(false);
         }
@@ -169,7 +182,7 @@ const Login = () => {
 
                         <div className="auth-actions">
                             <button
-                                className="btn btn-auth-submit auth-submit-btn"
+                                className={`btn btn-auth-submit auth-submit-btn ${shake ? 'btn-shake' : ''}`}
                                 type="submit"
                                 disabled={isBusy}
                             >

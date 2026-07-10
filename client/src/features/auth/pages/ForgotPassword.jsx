@@ -216,6 +216,12 @@ const ForgotPassword = () => {
     const [statusMessage, setStatusMessage] = useState('');
     const [statusType, setStatusType] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [shake, setShake] = useState(false);
+
+    const triggerShake = () => {
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+    };
 
     // if (!isInitialized) {
     //     return <div>Loading...</div>;
@@ -284,6 +290,7 @@ const ForgotPassword = () => {
         setStatusType('');
 
         if (!validateForm()) {
+            triggerShake();
             return;
         }
 
@@ -299,6 +306,7 @@ const ForgotPassword = () => {
         }
 
         if (!result.success) {
+            triggerShake();
             return;
         }
 
@@ -316,6 +324,7 @@ const ForgotPassword = () => {
         setStatusType('');
 
         if (!validateForm()) {
+            triggerShake();
             return;
         }
 
@@ -334,6 +343,7 @@ const ForgotPassword = () => {
         }
 
         if (!result.success) {
+            triggerShake();
             return;
         }
 
@@ -385,7 +395,7 @@ const ForgotPassword = () => {
                         />
 
                         <button
-                            className="btn btn-auth-submit"
+                            className={`btn btn-auth-submit ${shake ? 'btn-shake' : ''}`}
                             type="submit"
                             disabled={isSubmitting}
                         >
