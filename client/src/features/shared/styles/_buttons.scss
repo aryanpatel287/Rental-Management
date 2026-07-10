@@ -70,13 +70,39 @@
         color: var(--on-primary);
         border-radius: var(--border-radius);
         padding: 14px 18px;
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 150px;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: skewX(-25deg);
+            pointer-events: none;
+        }
 
         &:hover:not(:disabled) {
-            background-color: var(--primary-hover);
+            transform: none;
+            background-color: var(--primary);
+
+            &::after {
+                left: 150%;
+                transition: left 0.75s ease-out;
+            }
         }
 
         &:active:not(:disabled) {
-            background-color: var(--primary-hover);
+            background-color: var(--primary);
+            transform: scale(0.98);
         }
     }
 }
