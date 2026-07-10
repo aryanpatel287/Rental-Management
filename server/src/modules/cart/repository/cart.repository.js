@@ -6,17 +6,17 @@ import { productImages } from '../../../db/schema/product-images.schema.js';
 import { rentalRates } from '../../../db/schema/rental-rates.schema.js';
 import { eq, and, or, sql } from 'drizzle-orm';
 
-export async function findOrCreateCart(customerId) {
-    const existing = await db.select().from(carts).where(eq(carts.customerId, customerId)).limit(1);
+export async function findOrCreateCart(customerId, tx = db) {
+    const existing = await tx.select().from(carts).where(eq(carts.customerId, customerId)).limit(1);
     if (existing.length > 0) return existing[0];
-    const [newCart] = await db.insert(carts).values({ customerId }).returning();
+    const [newCart] = await tx.insert(carts).values({ customerId }).returning();
     return newCart;
 }
 
-export async function getCartWithItems(customerId) {
-    const cart = await findOrCreateCart(customerId);
+export async function getCartWithItems(customerId, tx = db) {
+    const cart = await findOrCreateCart(customerId, tx);
     
-    const rows = await db.select({
+    const rows = await tx.select({
         itemId: cartItems.id,
         productId: cartItems.productId,
         variantId: cartItems.variantId,
@@ -77,6 +77,6 @@ export async function deleteItem(itemId) {
     return db.delete(cartItems).where(eq(cartItems.id, itemId)).returning();
 }
 
-export async function clear(cartId) {
-    return db.delete(cartItems).where(eq(cartItems.cartId, cartId));
+export async function clear(cartId, tx = db) {
+    return tx.delete(cartItems).where(eq(cartItems.cartId, cartId));
 }

@@ -13,6 +13,8 @@ import { attributeRouter } from './modules/attribute/index.js';
 import { inventoryRouter } from './modules/inventory/index.js';
 import { availabilityRouter } from './modules/availability/index.js';
 import { cartRouter } from './modules/cart/index.js';
+import { quotationRouter } from './modules/quotation/index.js';
+import { orderRouter } from './modules/rental-order/index.js';
 
 const app = express();
 
@@ -41,5 +43,7 @@ app.use('/api/attributes', attributeRouter);
 app.use('/api/inventory', inventoryRouter);
 app.use('/api/reservations', availabilityRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/quotations', quotationRouter);
+app.use('/api/orders', orderRouter);
 
 export default app;
