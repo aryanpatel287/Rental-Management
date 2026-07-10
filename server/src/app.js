@@ -6,6 +6,7 @@ import envConfig from './config/envConfig.js';
 import { authRouter } from './modules/auth/index.js';
 import { crudRouter } from './modules/crud/index.js';
 import { dashboardRouter } from './modules/dashboard/index.js';
+import { categoryRouter } from './modules/category/index.js';
 
 const app = express();
 
@@ -27,5 +28,6 @@ app.use(morgan('combined'));
 app.use('/api/auth', authRouter);
 app.use('/api/crud', crudRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/categories', categoryRouter);
 
 export default app;
