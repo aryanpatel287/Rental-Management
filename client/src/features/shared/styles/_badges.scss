@@ -1,0 +1,30 @@
+@use '../../../app/variables' as vars;
+
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  background-color: vars.$color-surface-strong;
+  color: vars.$color-ink;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+  border-radius: vars.$rounded-pill;
+  padding: 4px 10px;
+  line-height: 1.4;
+
+  &--admin {
+    background-color: #eef2ff;
+    color: #4f46e5;
+  }
+
+  &--active {
+    background-color: #f0fdf4;
+    color: vars.$color-success;
+  }
+
+  &--deleted {
+    background-color: #fef2f2;
+    color: #ef4444;
+  }
+}

@@ -1,0 +1,71 @@
+@use '../../../app/variables' as vars;
+
+.text-input {
+  width: 100%;
+  height: 44px;
+  padding: 12px 16px;
+  background-color: vars.$color-surface-card;
+  color: vars.$color-ink;
+  font-size: 15px;
+  border: 1px solid vars.$color-hairline-strong;
+  border-radius: vars.$rounded-md;
+  outline: none;
+  transition: border-width vars.$transition-fast, border-color vars.$transition-fast, box-shadow vars.$transition-fast;
+
+  &::placeholder {
+    color: vars.$color-muted;
+  }
+
+  &:focus {
+    border: 2px solid vars.$color-ink;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  &--error {
+    border: 1px solid vars.$color-error;
+    
+    &:focus {
+      border: 2px solid vars.$color-error;
+      padding-top: 11px;
+      padding-bottom: 11px;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  i {
+    position: absolute;
+    left: 16px;
+    color: vars.$color-muted;
+    font-size: 16px;
+    pointer-events: none;
+    transition: color vars.$transition-fast;
+    z-index: 2;
+  }
+
+  .text-input {
+    padding-left: 44px;
+
+    &:focus {
+      padding-left: 43px;
+    }
+
+    &:focus + i {
+      color: vars.$color-ink;
+    }
+  }
+
+  .text-input--error + i {
+    color: vars.$color-error;
+  }
+}

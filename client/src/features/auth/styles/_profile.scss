@@ -1,0 +1,210 @@
+@use '../../../app/variables' as vars;
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: vars.$spacing-lg;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.dashboard-card {
+  background-color: vars.$color-surface-card;
+  border: 1px solid vars.$color-hairline-strong;
+  border-radius: vars.$rounded-lg;
+  padding: vars.$spacing-lg;
+  box-shadow: vars.$shadow-card;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-base;
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: vars.$color-ink;
+    border-bottom: 1px solid vars.$color-hairline;
+    padding-bottom: vars.$spacing-sm;
+    margin-bottom: vars.$spacing-xs;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    i {
+      font-size: 20px;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacing-base;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: vars.$spacing-base;
+
+    @media (min-width: 640px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: vars.$spacing-xs;
+  }
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: vars.$spacing-base;
+  padding: vars.$spacing-base 0;
+
+  &__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: vars.$rounded-full;
+    background-color: vars.$color-surface-strong;
+    color: vars.$color-ink;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 600;
+    border: 2px solid vars.$color-ink;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+  }
+
+  &__name {
+    font-size: 22px;
+    font-weight: 600;
+    color: vars.$color-ink;
+    letter-spacing: -0.5px;
+  }
+
+  &__email {
+    font-size: 14px;
+    color: vars.$color-body;
+  }
+
+  &__meta {
+    font-size: 12px;
+    color: vars.$color-muted;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: vars.$spacing-xs;
+  }
+}
+
+.danger-zone {
+  border: 1px solid vars.$color-error;
+  
+  .dashboard-card__title {
+    color: #b91c1c; // Dark red
+    border-bottom-color: #fca5a5; // Light red line
+  }
+
+  &__description {
+    font-size: 14px;
+    color: vars.$color-body;
+    margin-bottom: vars.$spacing-sm;
+    line-height: 1.5;
+  }
+
+  &__btn {
+    align-self: flex-start;
+  }
+}
+
+// Modal Styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(23, 23, 23, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: modal-fade-in 0.2s ease forwards;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 460px;
+  background-color: vars.$color-surface-card;
+  border-radius: vars.$rounded-lg;
+  padding: vars.$spacing-xl;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-base;
+  animation: modal-slide-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: vars.$color-error;
+
+    i {
+      font-size: 24px;
+    }
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__description {
+    font-size: 14px;
+    color: vars.$color-body;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: vars.$spacing-sm;
+    margin-top: vars.$spacing-sm;
+  }
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-slide-in {
+  from {
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}

@@ -1,0 +1,105 @@
+import bcrypt from 'bcryptjs';
+import { 
+    getUserById, 
+    updateUser, 
+    softDeleteUser, 
+    listUsers 
+} from '../../../db/query/users.query.db.js';
+import { AppError } from '../utils/appError.js';
+
+/**
+ * Update current user profile
+ * @param {string} userId
+ * @param {object} updates name, email
+ * @returns {object} updated user
+ */
+export async function updateProfile(userId, { name, email }) {
+    const updates = {};
+    if (name) updates.name = name;
+    if (email) updates.email = email;
+
+    const user = await updateUser(userId, updates);
+    if (!user) {
+        throw new AppError('User not found', 404);
+    }
+    return user;
+}
+
+/**
+ * Change current user password
+ * @param {string} userId
+ * @param {object} param1 currentPassword, newPassword
+ */
+export async function changePassword(userId, { currentPassword, newPassword }) {
+    const user = await getUserById(userId);
+    if (!user) {
+        throw new AppError('User not found', 404);
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!isMatch) {
+        throw new AppError('Current password is incorrect', 400);
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(newPassword, salt);
+
+    await updateUser(userId, { passwordHash });
+}
+
+/**
+ * Soft delete own user account
+ * @param {string} userId
+ */
+export async function deleteAccount(userId) {
+    const user = await softDeleteUser(userId);
+    if (!user) {
+        throw new AppError('User not found or already deleted', 404);
+    }
+    return user;
+}
+
+/**
+ * Get user by id (Admin helper)
+ * @param {string} id
+ */
+export async function adminGetUserById(id) {
+    const user = await getUserById(id, true);
+    if (!user) {
+        throw new AppError('User not found', 404);
+    }
+    return user;
+}
+
+/**
+ * List users (Admin helper)
+ * @param {boolean} includeDeleted
+ */
+export async function adminListUsers(includeDeleted = false) {
+    return listUsers(includeDeleted);
+}
+
+/**
+ * Change a user's role (Admin helper)
+ * @param {string} targetUserId
+ * @param {string} newRole
+ */
+export async function adminUpdateRole(targetUserId, newRole) {
+    const user = await updateUser(targetUserId, { role: newRole });
+    if (!user) {
+        throw new AppError('User not found', 404);
+    }
+    return user;
+}
+
+/**
+ * Soft delete user by ID (Admin helper)
+ * @param {string} targetUserId
+ */
+export async function adminDeleteUser(targetUserId) {
+    const user = await softDeleteUser(targetUserId);
+    if (!user) {
+        throw new AppError('User not found or already deleted', 404);
+    }
+    return user;
+}

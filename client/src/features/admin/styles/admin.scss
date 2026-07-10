@@ -1,0 +1,315 @@
+@use '../../../app/variables' as vars;
+
+.admin-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: vars.$spacing-base;
+  margin-bottom: vars.$spacing-lg;
+  border-bottom: 1px solid vars.$color-hairline;
+  padding-bottom: vars.$spacing-base;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: vars.$color-ink;
+      letter-spacing: -0.84px;
+    }
+
+    p {
+      font-size: 14px;
+      color: vars.$color-body;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+  }
+}
+
+// Custom Switch / Toggle Checkbox
+.toggle-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: vars.$color-body;
+  user-select: none;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  &__track {
+    width: 36px;
+    height: 20px;
+    background-color: vars.$color-surface-strong;
+    border-radius: vars.$rounded-pill;
+    position: relative;
+    border: 1px solid vars.$color-hairline-strong;
+    transition: background-color vars.$transition-fast;
+  }
+
+  &__thumb {
+    width: 14px;
+    height: 14px;
+    background-color: vars.$color-canvas;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: transform vars.$transition-fast;
+  }
+
+  input:checked + .toggle-control__track {
+    background-color: vars.$color-ink;
+    border-color: vars.$color-ink;
+  }
+
+  input:checked + .toggle-control__track .toggle-control__thumb {
+    transform: translateX(16px);
+  }
+}
+
+// User List (Responsive Table / Card Layout)
+.users-table-container {
+  width: 100%;
+  background-color: vars.$color-surface-card;
+  border: 1px solid vars.$color-hairline-strong;
+  border-radius: vars.$rounded-lg;
+  box-shadow: vars.$shadow-card;
+  overflow: hidden;
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+
+  th {
+    padding: vars.$spacing-base vars.$spacing-lg;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.88px;
+    text-transform: uppercase;
+    color: vars.$color-muted;
+    background-color: vars.$color-canvas-soft;
+    border-bottom: 1px solid vars.$color-hairline-strong;
+  }
+
+  td {
+    padding: vars.$spacing-base vars.$spacing-lg;
+    font-size: 14px;
+    color: vars.$color-body;
+    border-bottom: 1px solid vars.$color-hairline;
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  &__user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: vars.$color-surface-strong;
+    color: vars.$color-ink;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__user-name {
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__user-email {
+    font-size: 12px;
+    color: vars.$color-muted;
+  }
+}
+
+// Mobile Card List
+.users-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-base;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.user-item-card {
+  background-color: vars.$color-surface-card;
+  border: 1px solid vars.$color-hairline-strong;
+  border-radius: vars.$rounded-lg;
+  padding: vars.$spacing-base;
+  box-shadow: vars.$shadow-card;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-sm;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: vars.$color-surface-strong;
+    color: vars.$color-ink;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__name {
+    font-weight: 600;
+    color: vars.$color-ink;
+    font-size: 15px;
+  }
+
+  &__email {
+    font-size: 13px;
+    color: vars.$color-muted;
+  }
+
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    color: vars.$color-body;
+    border-top: 1px solid vars.$color-hairline;
+    padding-top: vars.$spacing-sm;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: vars.$spacing-xs;
+    border-top: 1px solid vars.$color-hairline;
+    padding-top: vars.$spacing-sm;
+  }
+}
+
+// Table Action Select and Action buttons
+.admin-select {
+  height: 32px;
+  padding: 0 8px;
+  background-color: vars.$color-surface-card;
+  border: 1px solid vars.$color-hairline-strong;
+  border-radius: vars.$rounded-xs;
+  font-size: 12px;
+  color: vars.$color-ink;
+  outline: none;
+  cursor: pointer;
+  transition: border-color vars.$transition-fast;
+
+  &:focus {
+    border-color: vars.$color-ink;
+  }
+}
+
+.action-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-action-btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: vars.$rounded-xs;
+  border: 1px solid vars.$color-hairline-strong;
+  background-color: transparent;
+  color: vars.$color-body;
+  cursor: pointer;
+  transition: all vars.$transition-fast;
+
+  &:hover {
+    color: vars.$color-ink;
+    border-color: vars.$color-ink;
+    background-color: vars.$color-canvas-soft;
+  }
+
+  &--danger:hover {
+    color: vars.$color-on-primary;
+    border-color: vars.$color-error;
+    background-color: vars.$color-error;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

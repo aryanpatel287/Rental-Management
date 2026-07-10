@@ -1,0 +1,242 @@
+@use '../../../app/variables' as vars;
+
+// Sidebar main container
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: vars.$color-surface-card;
+  border-right: 1px solid vars.$color-hairline-strong;
+  width: 260px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @media (max-width: 767px) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    transform: translateX(-100%);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
+
+    &--open {
+      transform: translateX(0);
+    }
+  }
+
+  // Header/Brand section
+  &__header {
+    height: 64px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid vars.$color-hairline;
+    text-decoration: none;
+    color: vars.$color-ink;
+
+    i {
+      font-size: 20px;
+      color: vars.$color-ink;
+    }
+
+    span {
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+    }
+  }
+
+  // Navigation Links area
+  &__nav {
+    flex: 1;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    color: vars.$color-body;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: vars.$rounded-md;
+    transition: all vars.$transition-fast;
+
+    i {
+      font-size: 18px;
+      transition: color vars.$transition-fast;
+    }
+
+    &:hover {
+      background-color: vars.$color-canvas-soft;
+      color: vars.$color-ink;
+    }
+
+    &--active {
+      background-color: vars.$color-surface-strong;
+      color: vars.$color-ink;
+      font-weight: 600;
+
+      i {
+        color: vars.$color-ink;
+      }
+    }
+  }
+
+  // User Profile + Log Out footer
+  &__footer {
+    padding: 20px 16px;
+    border-top: 1px solid vars.$color-hairline;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__user-plate {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: vars.$color-surface-strong;
+    color: vars.$color-ink;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+
+  &__user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__role-badge {
+    font-size: 9px;
+    padding: 2px 6px;
+    margin-top: 4px;
+    align-self: flex-start;
+  }
+
+  &__logout-btn {
+    width: 100%;
+    gap: 8px;
+    height: 38px;
+    font-size: 13px;
+  }
+}
+
+// Mobile Top Bar
+.sidebar-mobile-bar {
+  display: none;
+  height: 56px;
+  background-color: vars.$color-surface-card;
+  border-bottom: 1px solid vars.$color-hairline-strong;
+  padding: 0 16px;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+
+  @media (max-width: 767px) {
+    display: flex;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: vars.$color-ink;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+
+    i {
+      font-size: 18px;
+    }
+  }
+
+  &__toggle {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: vars.$color-ink;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: vars.$rounded-sm;
+    transition: background-color vars.$transition-fast;
+
+    &:hover {
+      background-color: vars.$color-canvas-soft;
+    }
+  }
+}
+
+// Overlay when Sidebar is open on mobile
+.sidebar-overlay {
+  display: none;
+  
+  @media (max-width: 767px) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 95;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+
+    &--visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+// Responsive dashboard layout wrappers
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: vars.$color-canvas;
+  flex-direction: row;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 40px 24px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 767px) {
+    padding: 24px 16px;
+  }
+}
+

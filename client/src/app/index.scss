@@ -1,0 +1,129 @@
+@use 'variables' as vars;
+@use '../features/shared/styles/shared';
+@use '../features/auth/styles/auth';
+@use '../features/admin/styles/admin';
+@use '../features/crud/styles/crud';
+@use '../features/dashboard/styles/dashboard';
+@import 'remixicon/fonts/remixicon.css';
+
+// ----------------------------------------------------
+// Base Reset & Elements
+// ----------------------------------------------------
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: vars.$font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: vars.$color-canvas;
+  color: vars.$color-ink;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a {
+  color: vars.$color-text-link;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color vars.$transition-fast;
+
+  &:hover {
+    color: vars.$color-primary-active;
+  }
+}
+
+// ----------------------------------------------------
+// Typography Utility Classes
+// ----------------------------------------------------
+.display-mega {
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -1.92px;
+  text-wrap: balance;
+}
+
+.display-xl {
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -1.44px;
+  text-wrap: balance;
+}
+
+.display-lg {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -1.08px;
+  text-wrap: balance;
+}
+
+.display-md {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.84px;
+}
+
+.display-sm {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+}
+
+.title-md {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.title-sm {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.body-md {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: vars.$color-body;
+}
+
+.body-sm {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: vars.$color-body;
+}
+
+.caption {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: vars.$color-muted;
+}
+
+.caption-uppercase {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+}
+
+.code-text {
+  font-family: vars.$font-mono;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}

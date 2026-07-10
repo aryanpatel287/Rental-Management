@@ -1,0 +1,817 @@
+@use '../../../app/variables' as vars;
+
+.dashboard-page {
+  padding: vars.$spacing-xl;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn vars.$transition-base;
+}
+
+.dashboard-page-header {
+  margin-bottom: vars.$spacing-xl;
+  
+  &__subtext {
+    margin-top: vars.$spacing-xs;
+    color: vars.$color-body;
+  }
+}
+
+// ----------------------------------------------------
+// Responsive Grid System
+// ----------------------------------------------------
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: vars.$spacing-lg;
+  grid-auto-flow: row dense;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+    gap: vars.$spacing-base;
+  }
+}
+
+// Grid Width Spans
+@for $i from 1 through 12 {
+  .span-w-#{$i} {
+    grid-column: span $i;
+
+    @media (max-width: 1024px) {
+      // Scale down spans for tablet
+      grid-column: span min(6, #{$i});
+    }
+
+    @media (max-width: 767px) {
+      grid-column: span 1 !important;
+    }
+  }
+}
+
+// Grid Height Spans
+@for $i from 1 through 4 {
+  .span-h-#{$i} {
+    grid-row: span $i;
+
+    @media (max-width: 767px) {
+      grid-row: auto !important;
+    }
+  }
+}
+
+// Base Card container style applied across all widgets
+.stat-card-widget,
+.chart-widget,
+.table-widget,
+.activity-feed-widget,
+.task-list-widget,
+.approval-queue-widget,
+.quick-actions-widget,
+.ai-prompt-widget {
+  background-color: vars.$color-surface-card;
+  border: 1px solid vars.$color-hairline-strong;
+  border-radius: vars.$rounded-lg;
+  padding: vars.$spacing-lg;
+  box-shadow: vars.$shadow-card;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform vars.$transition-base, box-shadow vars.$transition-base;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+}
+
+// ----------------------------------------------------
+// Stat Card Widget
+// ----------------------------------------------------
+.stat-card-widget {
+  justify-content: space-between;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: vars.$color-muted;
+  }
+
+  &__title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+  }
+
+  &__icon {
+    font-size: 20px;
+    color: vars.$color-ink;
+  }
+
+  &__content {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: vars.$spacing-sm;
+  }
+
+  &__count {
+    font-size: 32px;
+    font-weight: 600;
+    color: vars.$color-ink;
+    line-height: 1;
+  }
+
+  &__badge {
+    align-self: center;
+  }
+
+  &__spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid vars.$color-hairline;
+    border-top-color: vars.$color-primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+// ----------------------------------------------------
+// Chart Widget
+// ----------------------------------------------------
+.chart-widget {
+  &__header {
+    margin-bottom: vars.$spacing-md;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__canvas-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  &__svg {
+    width: 100%;
+    height: auto;
+  }
+
+  &__axis-label {
+    font-size: 9px;
+    fill: vars.$color-muted;
+    font-family: vars.$font-sans;
+
+    &--x {
+      font-size: 10px;
+    }
+  }
+}
+
+.chart-point {
+  transition: r 0.15s ease;
+  cursor: pointer;
+
+  &:hover {
+    r: 6.5;
+  }
+}
+
+// ----------------------------------------------------
+// Table Widget (Feeds)
+// ----------------------------------------------------
+.table-widget {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: vars.$spacing-md;
+    border-bottom: 1px solid vars.$color-hairline;
+    padding-bottom: vars.$spacing-xs;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__view-all {
+    background: none;
+    border: none;
+    color: vars.$color-text-link;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    transition: color vars.$transition-fast;
+
+    &:hover {
+      color: vars.$color-primary-active;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: vars.$spacing-xl 0;
+    color: vars.$color-muted-soft;
+
+    i {
+      font-size: 28px;
+      margin-bottom: vars.$spacing-xs;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: vars.$spacing-sm vars.$spacing-base;
+    border-radius: vars.$rounded-md;
+    cursor: pointer;
+    transition: background-color vars.$transition-fast;
+
+    &:hover {
+      background-color: vars.$color-canvas-soft;
+
+      .table-widget__arrow {
+        transform: translateX(3px);
+        color: vars.$color-ink;
+      }
+    }
+  }
+
+  &__item-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__item-primary {
+    font-size: 14px;
+    font-weight: 500;
+    color: vars.$color-ink;
+  }
+
+  &__item-secondary {
+    font-size: 12px;
+    color: vars.$color-body;
+    margin-top: 2px;
+  }
+
+  &__arrow {
+    font-size: 16px;
+    color: vars.$color-muted-soft;
+    transition: all vars.$transition-fast;
+  }
+
+  &__spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid vars.$color-hairline;
+    border-top-color: vars.$color-primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 24px auto;
+  }
+
+  &--loading {
+    justify-content: center;
+    text-align: center;
+    color: vars.$color-muted;
+  }
+}
+
+// ----------------------------------------------------
+// Activity Timeline
+// ----------------------------------------------------
+.activity-feed-widget {
+  &__header {
+    margin-bottom: vars.$spacing-md;
+    border-bottom: 1px solid vars.$color-hairline;
+    padding-bottom: vars.$spacing-xs;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+  }
+}
+
+.activity-timeline {
+  list-style: none;
+  position: relative;
+  padding-left: 28px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background-color: vars.$color-hairline-strong;
+  }
+
+  &__item {
+    position: relative;
+    margin-bottom: vars.$spacing-md;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__icon-wrapper {
+    position: absolute;
+    left: -28px;
+    top: 2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: vars.$color-surface-strong;
+    color: vars.$color-ink;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    border: 2px solid vars.$color-surface-card;
+
+    &--success {
+      background-color: #d1fae5;
+      color: vars.$color-success;
+    }
+
+    &--warning {
+      background-color: #fef3c7;
+      color: vars.$color-warning;
+    }
+
+    &--info {
+      background-color: #e0f2fe;
+      color: vars.$color-text-link;
+    }
+  }
+
+  &__content {
+    line-height: 1.35;
+  }
+
+  &__action {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__detail {
+    font-size: 12px;
+    color: vars.$color-body;
+    margin-top: 1px;
+  }
+
+  &__time {
+    font-size: 11px;
+    color: vars.$color-muted;
+    display: block;
+    margin-top: 2px;
+  }
+}
+
+// ----------------------------------------------------
+// Task Checklist Widget
+// ----------------------------------------------------
+.task-list-widget {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: vars.$spacing-md;
+    border-bottom: 1px solid vars.$color-hairline;
+    padding-bottom: vars.$spacing-xs;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: vars.$spacing-sm;
+    padding: vars.$spacing-xs vars.$spacing-sm;
+    border-radius: vars.$rounded-md;
+    cursor: pointer;
+    transition: background-color vars.$transition-fast;
+
+    &:hover {
+      background-color: vars.$color-canvas-soft;
+    }
+
+    &--done {
+      .task-list-widget__text {
+        text-decoration: line-through;
+        color: vars.$color-muted;
+      }
+    }
+  }
+
+  &__text {
+    font-size: 13.5px;
+    color: vars.$color-ink;
+    line-height: 1.3;
+  }
+}
+
+.task-icon {
+  font-size: 17px;
+  color: vars.$color-muted-soft;
+  margin-top: 1px;
+
+  &--done {
+    color: vars.$color-success;
+  }
+}
+
+.task-count-badge {
+  font-size: 10px;
+  background-color: vars.$color-surface-strong;
+  color: vars.$color-ink;
+}
+
+// ----------------------------------------------------
+// Approval Queue Widget
+// ----------------------------------------------------
+.approval-queue-widget {
+  &__header {
+    margin-bottom: vars.$spacing-md;
+    border-bottom: 1px solid vars.$color-hairline;
+    padding-bottom: vars.$spacing-xs;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 32px 0;
+    color: vars.$color-success;
+
+    i {
+      font-size: 28px;
+      margin-bottom: vars.$spacing-xs;
+      display: block;
+    }
+  }
+
+  &__items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: vars.$spacing-sm;
+    border: 1px solid vars.$color-hairline;
+    border-radius: vars.$rounded-md;
+    background-color: vars.$color-canvas-soft;
+    gap: vars.$spacing-sm;
+  }
+
+  &__details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__type {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__requester {
+    color: vars.$color-body;
+    margin-top: 1px;
+  }
+
+  &__summary {
+    color: vars.$color-muted;
+    margin-top: 3px;
+    font-size: 12px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: vars.$spacing-xxs;
+  }
+}
+
+.approval-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border-radius: vars.$rounded-sm;
+
+  &--approve {
+    background-color: vars.$color-success !important;
+    border-color: vars.$color-success !important;
+    color: white !important;
+
+    &:hover {
+      background-color: #15803d !important;
+    }
+  }
+
+  &--reject {
+    background-color: #fca5a5 !important;
+    border-color: #fca5a5 !important;
+    color: #991b1b !important;
+
+    &:hover {
+      background-color: #ef4444 !important;
+      color: white !important;
+    }
+  }
+}
+
+// ----------------------------------------------------
+// Quick Actions Widget
+// ----------------------------------------------------
+.quick-actions-widget {
+  &__header {
+    margin-bottom: vars.$spacing-md;
+    border-bottom: 1px solid vars.$color-hairline;
+    padding-bottom: vars.$spacing-xs;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: vars.$color-ink;
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: vars.$spacing-sm;
+  width: 100%;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quick-action-btn {
+  background-color: vars.$color-canvas-soft;
+  border: 1px solid vars.$color-hairline-strong;
+  border-radius: vars.$rounded-md;
+  padding: vars.$spacing-sm;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: vars.$spacing-xs;
+  transition: all vars.$transition-fast;
+  height: 80px;
+
+  i {
+    font-size: 20px;
+    color: vars.$color-ink;
+    transition: transform vars.$transition-fast;
+  }
+
+  &__label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: vars.$color-body;
+  }
+
+  &:hover {
+    background-color: vars.$color-surface-strong;
+    border-color: vars.$color-ink;
+
+    i {
+      transform: translateY(-2px);
+    }
+
+    .quick-action-btn__label {
+      color: vars.$color-ink;
+    }
+  }
+}
+
+// ----------------------------------------------------
+// AI Prompt Assistant Widget
+// ----------------------------------------------------
+.ai-prompt-widget {
+  &__header {
+    margin-bottom: vars.$spacing-md;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: vars.$color-ink;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.ai-spark-icon {
+  color: #8145b5; // accent-preview purple
+}
+
+.ai-prompt-form {
+  display: flex;
+  gap: vars.$spacing-sm;
+  margin-bottom: vars.$spacing-md;
+}
+
+.ai-prompt-input {
+  flex: 1;
+  height: 38px;
+}
+
+.ai-prompt-btn {
+  height: 38px;
+  background-color: #171717; // solid dark prompt action
+  
+  &:hover {
+    background-color: #262626;
+  }
+}
+
+.ai-loading-container {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  padding: vars.$spacing-xs 0;
+  color: vars.$color-muted;
+}
+
+.ai-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #8145b5;
+  border-radius: 50%;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+.ai-response-panel {
+  display: flex;
+  gap: vars.$spacing-sm;
+  background-color: #faf5ff; // very light purple wash
+  border: 1px solid #e9d5ff;
+  border-radius: vars.$rounded-md;
+  padding: vars.$spacing-sm vars.$spacing-base;
+  animation: fadeIn vars.$transition-base;
+}
+
+.ai-bot-icon {
+  font-size: 18px;
+  color: #8145b5;
+  margin-top: 1px;
+}
+
+.ai-response-text {
+  color: #581c87;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+// ----------------------------------------------------
+// Dashboard Loading / Errors
+// ----------------------------------------------------
+.dashboard-page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px;
+  color: vars.$color-muted;
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid vars.$color-hairline-strong;
+    border-top-color: vars.$color-primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: vars.$spacing-base;
+  }
+}
+
+.dashboard-page-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px;
+  max-width: 500px;
+  margin: 96px auto;
+  background-color: vars.$color-surface-card;
+  border: 1px solid vars.$color-hairline-strong;
+  border-radius: vars.$rounded-lg;
+
+  .error-icon {
+    font-size: 48px;
+    color: vars.$color-error;
+    margin-bottom: vars.$spacing-base;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: vars.$spacing-sm;
+    color: vars.$color-ink;
+  }
+
+  p {
+    color: vars.$color-body;
+    margin-bottom: vars.$spacing-lg;
+  }
+}
+
+// ----------------------------------------------------
+// Fallback
+// ----------------------------------------------------
+.unknown-widget-fallback {
+  border: 1px dashed vars.$color-hairline-strong;
+  padding: vars.$spacing-lg;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(0.6); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}

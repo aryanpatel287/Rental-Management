@@ -1,0 +1,13 @@
+node_modules/
+client/node_modules/
+server/node_modules/
+.env
+package-lock.json
+.github/
+.agents/
+.kilocode/
+skills-lock.json
+GEMINI.md
+AGENTS.md
+DESIGN.md
+.ai/
