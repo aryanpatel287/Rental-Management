@@ -28,6 +28,22 @@ export const registerValidator = [
     body('password')
         .isLength({ min: 6 })
         .withMessage('Password must be at least 6 characters long'),
+    body('companyName')
+        .trim()
+        .notEmpty()
+        .withMessage('Company Name is required'),
+    body('gstin')
+        .trim()
+        .notEmpty()
+        .withMessage('GSTIN is required')
+        .isLength({ min: 15, max: 15 })
+        .withMessage('GSTIN must be exactly 15 characters long'),
+    body('phone')
+        .optional()
+        .trim(),
+    body('couponCode')
+        .optional()
+        .trim(),
     validateRequest,
 ];
 
@@ -43,21 +59,6 @@ export const loginValidator = [
     validateRequest,
 ];
 
-export const updateProfileValidator = [
-    body('name')
-        .optional()
-        .trim()
-        .notEmpty()
-        .withMessage('Name cannot be empty'),
-    body('email')
-        .optional()
-        .trim()
-        .isEmail()
-        .withMessage('A valid email is required')
-        .normalizeEmail(),
-    validateRequest,
-];
-
 export const changePasswordValidator = [
     body('currentPassword')
         .notEmpty()
@@ -68,14 +69,6 @@ export const changePasswordValidator = [
     validateRequest,
 ];
 
-export const updateRoleValidator = [
-    body('role')
-        .notEmpty()
-        .withMessage('Role is required')
-        .isIn(['USER', 'ADMIN'])
-        .withMessage('Role must be either USER or ADMIN'),
-    validateRequest,
-];
 
 export const forgotPasswordValidator = [
     body('email')

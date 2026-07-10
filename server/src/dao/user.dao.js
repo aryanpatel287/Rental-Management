@@ -1,5 +1,6 @@
 import { db } from '../config/database.js';
 import { users } from '../db/schema/users.schema.js';
+import { userProfiles } from '../db/schema/user_profiles.schema.js';
 import { eq, and } from 'drizzle-orm';
 
 /**
@@ -31,12 +32,97 @@ export async function getUserById(id, includeDeleted = false) {
 }
 
 /**
+ * Get user with profile by ID
+ * @param {string} id
+ * @param {boolean} includeDeleted
+ */
+export async function getUserWithProfileById(id, includeDeleted = false) {
+    const filters = [eq(users.id, id)];
+    if (!includeDeleted) {
+        filters.push(eq(users.isDeleted, false));
+    }
+    const rows = await db
+        .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            password: users.password,
+            role: users.role,
+            emailVerified: users.emailVerified,
+            isActive: users.isActive,
+            isDeleted: users.isDeleted,
+            deletedAt: users.deletedAt,
+            createdAt: users.createdAt,
+            updatedAt: users.updatedAt,
+            phone: userProfiles.phone,
+            companyName: userProfiles.companyName,
+            gstin: userProfiles.gstin,
+            avatar: userProfiles.avatar,
+        })
+        .from(users)
+        .leftJoin(userProfiles, eq(users.id, userProfiles.userId))
+        .where(and(...filters));
+        
+    return rows[0] || null;
+}
+
+/**
+ * Get user with profile by email
+ * @param {string} email
+ * @param {boolean} includeDeleted
+ */
+export async function getUserWithProfileByEmail(email, includeDeleted = false) {
+    const filters = [eq(users.email, email)];
+    if (!includeDeleted) {
+        filters.push(eq(users.isDeleted, false));
+    }
+    const rows = await db
+        .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            password: users.password,
+            role: users.role,
+            emailVerified: users.emailVerified,
+            isActive: users.isActive,
+            isDeleted: users.isDeleted,
+            deletedAt: users.deletedAt,
+            createdAt: users.createdAt,
+            updatedAt: users.updatedAt,
+            phone: userProfiles.phone,
+            companyName: userProfiles.companyName,
+            gstin: userProfiles.gstin,
+            avatar: userProfiles.avatar,
+        })
+        .from(users)
+        .leftJoin(userProfiles, eq(users.id, userProfiles.userId))
+        .where(and(...filters));
+        
+    return rows[0] || null;
+}
+
+/**
  * Create a new user record
  * @param {object} userData
  */
 export async function createUser(userData) {
     const [user] = await db.insert(users).values(userData).returning();
     return user;
+}
+
+/**
+ * Create user and profile in a transaction
+ * @param {object} userData
+ * @param {object} profileData
+ * @param {object} tx
+ */
+export async function createUserWithProfile(userData, profileData, tx = db) {
+    const [user] = await tx.insert(users).values(userData).returning();
+    const [profile] = await tx
+        .insert(userProfiles)
+        .values({ ...profileData, userId: user.id })
+        .returning();
+    return { ...user, ...profile };
 }
 
 /**
@@ -51,6 +137,40 @@ export async function updateUser(id, updates) {
         .where(and(eq(users.id, id), eq(users.isDeleted, false)))
         .returning();
     return user || null;
+}
+
+/**
+ * Update user and profile details in a transaction
+ * @param {string} id
+ * @param {object} userUpdates
+ * @param {object} profileUpdates
+ * @param {object} tx
+ */
+export async function updateUserWithProfile(id, userUpdates, profileUpdates, tx = db) {
+    let user = null;
+    let profile = null;
+
+    if (Object.keys(userUpdates).length > 0) {
+        [user] = await tx
+            .update(users)
+            .set({ ...userUpdates, updatedAt: new Date() })
+            .where(and(eq(users.id, id), eq(users.isDeleted, false)))
+            .returning();
+    } else {
+        [user] = await tx.select().from(users).where(eq(users.id, id));
+    }
+
+    if (Object.keys(profileUpdates).length > 0) {
+        [profile] = await tx
+            .update(userProfiles)
+            .set({ ...profileUpdates, updatedAt: new Date() })
+            .where(eq(userProfiles.userId, id))
+            .returning();
+    } else {
+        [profile] = await tx.select().from(userProfiles).where(eq(userProfiles.userId, id));
+    }
+
+    return { ...user, ...profile };
 }
 
 /**
@@ -80,3 +200,44 @@ export async function listUsers(includeDeleted = false) {
     }
     return db.select().from(users).where(eq(users.isDeleted, false));
 }
+
+/**
+ * List all users with their profiles, optionally filtered by role
+ * @param {boolean} includeDeleted
+ * @param {string} roleFilter
+ */
+export async function listUsersWithProfiles(includeDeleted = false, roleFilter = null) {
+    const filters = [];
+    if (!includeDeleted) {
+        filters.push(eq(users.isDeleted, false));
+    }
+    if (roleFilter) {
+        filters.push(eq(users.role, roleFilter));
+    }
+
+    const query = db
+        .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            role: users.role,
+            isActive: users.isActive,
+            isDeleted: users.isDeleted,
+            deletedAt: users.deletedAt,
+            emailVerified: users.emailVerified,
+            createdAt: users.createdAt,
+            updatedAt: users.updatedAt,
+            phone: userProfiles.phone,
+            companyName: userProfiles.companyName,
+            gstin: userProfiles.gstin,
+            avatar: userProfiles.avatar,
+        })
+        .from(users)
+        .leftJoin(userProfiles, eq(users.id, userProfiles.userId));
+
+    if (filters.length > 0) {
+        return query.where(and(...filters));
+    }
+    return query;
+}
+

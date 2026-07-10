@@ -1,7 +1,11 @@
 import bcrypt from 'bcryptjs';
 import redis from '../../../config/cache.js';
-import { getUserByEmail, updateUser, createUser } from '../../../dao/user.dao.js';
+import { db } from '../../../config/database.js';
+import { coupons, couponUsages } from '../../../db/schema/coupons.schema.js';
+import { getUserWithProfileByEmail, getUserWithProfileById, updateUserWithProfile, createUserWithProfile, getUserById, updateUser } from '../../../dao/user.dao.js';
+
 import { sendResponse, sendTokenResponse } from '../../../utils/response.utlis.js';
+import { eq } from 'drizzle-orm';
 import { 
     issueOtp, 
     verifyOtp, 
@@ -12,33 +16,84 @@ import {
     normalizeEmail 
 } from '../../../utils/otp.utils.js';
 
+
 /**
  * Handle user registration request
  */
 export async function register(req, res, next) {
     try {
-        const { email, password, name } = req.body || {};
+        const { email, password, name, companyName, gstin, phone, couponCode } = req.body || {};
         const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
         const passwordValue = typeof password === 'string' ? password : '';
         const nameValue = typeof name === 'string' ? name.trim() : '';
+        const companyNameValue = typeof companyName === 'string' ? companyName.trim() : '';
+        const gstinValue = typeof gstin === 'string' ? gstin.trim() : '';
+        const phoneValue = typeof phone === 'string' ? phone.trim() : '';
+        const couponCodeValue = typeof couponCode === 'string' ? couponCode.trim().toUpperCase() : '';
 
-        if (!normalizedEmail || !passwordValue) {
+        if (!normalizedEmail || !passwordValue || !companyNameValue || !gstinValue) {
             return sendResponse({
                 res,
                 statusCode: 400,
-                message: 'Email and password are required.',
+                message: 'Email, password, company name, and GSTIN are required.',
                 success: false,
             });
         }
 
-        const existingUser = await getUserByEmail(normalizedEmail);
+        const existingUser = await getUserWithProfileByEmail(normalizedEmail);
         if (existingUser) {
             return sendResponse({
                 res,
-                statusCode: 409,
-                message: 'Email already in use.',
+                statusCode: 400,
+                message: 'Email is already registered',
                 success: false,
             });
+        }
+
+        let coupon = null;
+        if (couponCodeValue) {
+            const [foundCoupon] = await db
+                .select()
+                .from(coupons)
+                .where(eq(coupons.code, couponCodeValue));
+
+            if (!foundCoupon) {
+                return sendResponse({
+                    res,
+                    statusCode: 400,
+                    message: 'Invalid coupon code.',
+                    success: false,
+                });
+            }
+
+            if (!foundCoupon.isActive) {
+                return sendResponse({
+                    res,
+                    statusCode: 400,
+                    message: 'Coupon is inactive.',
+                    success: false,
+                });
+            }
+
+            if (foundCoupon.expiresAt && new Date(foundCoupon.expiresAt) < new Date()) {
+                return sendResponse({
+                    res,
+                    statusCode: 400,
+                    message: 'Coupon has expired.',
+                    success: false,
+                });
+            }
+
+            if (foundCoupon.usageLimit !== null && foundCoupon.usedCount >= foundCoupon.usageLimit) {
+                return sendResponse({
+                    res,
+                    statusCode: 400,
+                    message: 'Coupon usage limit reached.',
+                    success: false,
+                });
+            }
+
+            coupon = foundCoupon;
         }
 
         const hashedPassword = await bcrypt.hash(passwordValue, 10);
@@ -59,21 +114,51 @@ export async function register(req, res, next) {
             });
         }
 
-        const user = await createUser({
-            email: normalizedEmail,
-            password: hashedPassword,
-            name: nameValue || '',
-            role: 'USER',
-            emailVerified: false,
-            isActive: true,
-            isDeleted: false,
+        const user = await db.transaction(async (tx) => {
+            const createdUser = await createUserWithProfile(
+                {
+                    email: normalizedEmail,
+                    password: hashedPassword,
+                    name: nameValue || '',
+                    role: 'CUSTOMER',
+                    emailVerified: false,
+                    isActive: true,
+                    isDeleted: false,
+                },
+                {
+                    phone: phoneValue || null,
+                    companyName: companyNameValue,
+                    gstin: gstinValue,
+                    avatar: null,
+                },
+                tx
+            );
+
+            if (coupon) {
+                await tx
+                    .update(coupons)
+                    .set({
+                        usedCount: coupon.usedCount + 1,
+                        updatedAt: new Date(),
+                    })
+                    .where(eq(coupons.id, coupon.id));
+
+                await tx.insert(couponUsages).values({
+                    couponId: coupon.id,
+                    userId: createdUser.id,
+                    usedAt: new Date(),
+                });
+            }
+
+            return createdUser;
         });
 
-        return sendTokenResponse(res, 201, 'User registered successfully.', user);
+        return sendTokenResponse(res, 201, 'User registered successfully', user);
     } catch (error) {
         next(error);
     }
 }
+
 
 /**
  * Handle user login request
@@ -91,7 +176,7 @@ export async function login(req, res, next) {
             });
         }
 
-        const user = await getUserByEmail(email.trim().toLowerCase());
+        const user = await getUserWithProfileByEmail(email.trim().toLowerCase());
         if (!user) {
             return sendResponse({
                 res,
@@ -116,6 +201,7 @@ export async function login(req, res, next) {
         next(error);
     }
 }
+
 
 /**
  * Handle user logout request
@@ -470,3 +556,93 @@ export async function resetPassword(req, res, next) {
         next(error);
     }
 }
+
+/**
+ * Get current logged in user details
+ */
+export async function getMe(req, res, next) {
+    try {
+        const user = req.user;
+        return sendResponse({
+            res,
+            statusCode: 200,
+            message: 'User retrieved successfully',
+            success: true,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                isActive: user.isActive,
+                emailVerified: user.emailVerified,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+                phone: user.phone || null,
+                companyName: user.companyName || null,
+                gstin: user.gstin || null,
+                avatar: user.avatar || null,
+            },
+            data: {
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    isActive: user.isActive,
+                    emailVerified: user.emailVerified,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                    phone: user.phone || null,
+                    companyName: user.companyName || null,
+                    gstin: user.gstin || null,
+                    avatar: user.avatar || null,
+                },
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * Change current user password
+ */
+export async function changePassword(req, res, next) {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.user.id;
+
+        const user = await getUserById(userId);
+        if (!user) {
+            return sendResponse({
+                res,
+                statusCode: 404,
+                message: 'User not found.',
+                success: false,
+            });
+        }
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return sendResponse({
+                res,
+                statusCode: 400,
+                message: 'Current password is incorrect.',
+                success: false,
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await updateUser(userId, { password: hashedPassword });
+
+        return sendResponse({
+            res,
+            statusCode: 200,
+            message: 'Password changed successfully',
+            success: true,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+

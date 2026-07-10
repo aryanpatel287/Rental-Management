@@ -4,6 +4,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import envConfig from './config/envConfig.js';
 import { authRouter } from './modules/auth/index.js';
+import { userRouter } from './modules/users/index.js';
+import { addressRouter } from './modules/addresses/index.js';
 import { crudRouter } from './modules/crud/index.js';
 import { dashboardRouter } from './modules/dashboard/index.js';
 
@@ -25,7 +27,10 @@ app.use(
 app.use(morgan('combined'));
 
 app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
+app.use('/api/addresses', addressRouter);
 app.use('/api/crud', crudRouter);
 app.use('/api/dashboard', dashboardRouter);
+
 
 export default app;

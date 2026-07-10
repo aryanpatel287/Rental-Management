@@ -43,20 +43,31 @@ export async function sendTokenResponse(res, statusCode, message, user) {
 
     setTokenCookie(res, token);
 
+    const userObj = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+    };
+
+    if (user.phone !== undefined) userObj.phone = user.phone;
+    if (user.companyName !== undefined) userObj.companyName = user.companyName;
+    if (user.gstin !== undefined) userObj.gstin = user.gstin;
+    if (user.avatar !== undefined) userObj.avatar = user.avatar;
+
     return sendResponse({
         res,
         statusCode,
         message,
         success: true,
-        user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            isActive: user.isActive,
-            emailVerified: user.emailVerified,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-        },
+        user: userObj,
+        data: {
+            user: userObj
+        }
     });
 }
+

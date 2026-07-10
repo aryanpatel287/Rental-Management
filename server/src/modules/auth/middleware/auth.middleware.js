@@ -1,6 +1,6 @@
 import redis from '../../../config/cache.js';
 import { verifyToken } from '../utils/jwt.js';
-import { getUserById } from '../../../dao/user.dao.js';
+import { getUserWithProfileById } from '../../../dao/user.dao.js';
 import { sendResponse } from '../../../utils/response.utlis.js';
 
 /**
@@ -51,7 +51,7 @@ export async function protect(req, res, next) {
             });
         }
 
-        const user = await getUserById(decoded.id);
+        const user = await getUserWithProfileById(decoded.id);
         if (!user) {
             return sendResponse({
                 res,
