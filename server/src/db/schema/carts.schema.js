@@ -1,4 +1,4 @@
-import { pgTable, uuid, integer, timestamp, index } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, integer, timestamp, index, text } from 'drizzle-orm/pg-core';
 import { users } from './users.schema.js';
 import { products } from './products.schema.js';
 import { productVariants } from './variants.schema.js';
@@ -34,6 +34,7 @@ export const cartItems = pgTable(
         variantId: uuid('variant_id')
             .references(() => productVariants.id, { onDelete: 'cascade' }),
         quantity: integer('quantity').default(1).notNull(),
+        rentPeriod: text('rent_period').default('Day').notNull(),
         rentalStart: timestamp('rental_start', { withTimezone: true }).notNull(),
         rentalEnd: timestamp('rental_end', { withTimezone: true }).notNull(),
         createdAt: timestamp('created_at', { withTimezone: true })
