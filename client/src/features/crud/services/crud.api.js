@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { API_BASE_URL } from '../../../app/runtime.config.js';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const crudClient = axios.create({
   baseURL: API_BASE_URL,

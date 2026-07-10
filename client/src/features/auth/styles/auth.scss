@@ -1,4 +1,181 @@
-// Auth feature main style manifest
-@use 'login-register';
-@use 'profile';
-@use 'forbidden';
+@use '../../shared/styles/mixins' as *;
+
+main.auth-page {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-6);
+    background: var(--bg-app);
+}
+
+.auth-form-container {
+    width: min(100%, var(--auth-card-width));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-8);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: none;
+}
+
+.auth-form-container--register {
+    width: min(100%, 460px);
+}
+
+.auth-branding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    text-align: center;
+}
+
+.auth-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.auth-eyebrow {
+    margin: 0;
+    @include label;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--primary);
+}
+
+.form-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.form-title {
+    margin: 0;
+    @include heading-lg;
+    color: var(--text-main);
+}
+
+.form-subtitle {
+    margin: 0;
+    color: var(--text-muted);
+    @include body-sm;
+    line-height: var(--line-height-base);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.auth-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.auth-submit-btn {
+    width: 100%;
+}
+
+.form-error {
+    margin: 0;
+}
+
+.form-error--inline {
+    padding: 12px 14px;
+    border-radius: var(--border-radius-lg);
+    background: var(--danger-bg);
+    color: var(--danger-dark);
+    border: 1px solid var(--danger);
+}
+
+.toast-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 12px 14px;
+    border-radius: var(--border-radius-lg);
+    @include body-sm;
+    animation: toast-in 0.2s ease-out;
+
+    &.is-success {
+        border: 1px solid var(--success);
+        background: var(--success-bg);
+        color: var(--success-text);
+    }
+
+    &.is-error {
+        border: 1px solid var(--danger);
+        background: var(--danger-bg);
+        color: var(--danger-dark);
+    }
+}
+
+
+.auth-footer-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.form-footer {
+    margin: 0;
+    @include body-sm;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.auth-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+    transition: var(--transition-smooth);
+
+    &:hover {
+        color: var(--primary-hover);
+    }
+}
+
+.forgot-password-copy {
+    margin: 0;
+    color: var(--text-muted);
+    @include body-sm;
+}
+
+.otp-help {
+    margin: calc(var(--space-1) * -1) 0 0;
+    color: var(--text-muted);
+    @include body-sm;
+}
+
+@keyframes toast-in {
+    from {
+        transform: translateY(-4px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@include respond-below('sm') {
+    .auth-form-container {
+        padding: var(--space-6);
+        border-radius: var(--border-radius);
+    }
+
+    .form-title {
+        font-size: var(--font-size-md);
+    }
+}
+

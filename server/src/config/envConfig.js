@@ -42,13 +42,7 @@ if (
     throw new Error('MISSING ENVIRONMENT VARIABLES FOR REDIS');
 }
 
-if (
-    !process.env.MJ_APIKEY_PUBLIC ||
-    !process.env.MJ_APIKEY_PRIVATE ||
-    !process.env.MJ_USER
-) {
-    throw new Error('MISSING ENVIRONMENT VARIABLES FOR MAILJET API');
-}
+
 
 if (!process.env.IMAGEKIT_PRIVATE_KEY) {
     throw new Error('MISSING ENVIRONMENT VARIABLES FOR IMAGEKIT API');
@@ -85,10 +79,7 @@ const envConfig = {
     GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN,
     GOOGLE_SENDER_EMAIL: process.env.GOOGLE_SENDER_EMAIL,
 
-    //  Mailjet Api keys
-    MJ_APIKEY_PUBLIC: process.env.MJ_APIKEY_PUBLIC,
-    MJ_APIKEY_PRIVATE: process.env.MJ_APIKEY_PRIVATE,
-    MJ_USER: process.env.MJ_USER,
+
 
     //  Ai Tools Keys
     IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY,

@@ -1,14 +1,12 @@
-@use '../../../app/variables' as vars;
-
 .admin-header {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  gap: vars.$spacing-base;
-  margin-bottom: vars.$spacing-lg;
-  border-bottom: 1px solid vars.$color-hairline;
-  padding-bottom: vars.$spacing-base;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-4);
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -23,20 +21,20 @@
     h1 {
       font-size: 28px;
       font-weight: 600;
-      color: vars.$color-ink;
+      color: var(--text-main);
       letter-spacing: -0.84px;
     }
 
     p {
       font-size: 14px;
-      color: vars.$color-body;
+      color: var(--text-muted);
     }
   }
 
   &__controls {
     display: flex;
     align-items: center;
-    gap: vars.$spacing-sm;
+    gap: var(--space-3);
   }
 }
 
@@ -48,7 +46,7 @@
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
-  color: vars.$color-body;
+  color: var(--text-muted);
   user-select: none;
 
   input {
@@ -61,28 +59,28 @@
   &__track {
     width: 36px;
     height: 20px;
-    background-color: vars.$color-surface-strong;
-    border-radius: vars.$rounded-pill;
+    background-color: var(--bg-input);
+    border-radius: var(--rounded-pill);
     position: relative;
-    border: 1px solid vars.$color-hairline-strong;
-    transition: background-color vars.$transition-fast;
+    border: 1px solid var(--border-strong);
+    transition: background-color var(--transition-smooth);
   }
 
   &__thumb {
     width: 14px;
     height: 14px;
-    background-color: vars.$color-canvas;
+    background-color: var(--bg-app);
     border-radius: 50%;
     position: absolute;
     top: 2px;
     left: 2px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    transition: transform vars.$transition-fast;
+    transition: transform var(--transition-smooth);
   }
 
   input:checked + .toggle-control__track {
-    background-color: vars.$color-ink;
-    border-color: vars.$color-ink;
+    background-color: var(--text-main);
+    border-color: var(--text-main);
   }
 
   input:checked + .toggle-control__track .toggle-control__thumb {
@@ -93,10 +91,10 @@
 // User List (Responsive Table / Card Layout)
 .users-table-container {
   width: 100%;
-  background-color: vars.$color-surface-card;
-  border: 1px solid vars.$color-hairline-strong;
-  border-radius: vars.$rounded-lg;
-  box-shadow: vars.$shadow-card;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
   display: none;
 
@@ -111,21 +109,21 @@
   text-align: left;
 
   th {
-    padding: vars.$spacing-base vars.$spacing-lg;
+    padding: var(--space-4) var(--space-6);
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.88px;
     text-transform: uppercase;
-    color: vars.$color-muted;
-    background-color: vars.$color-canvas-soft;
-    border-bottom: 1px solid vars.$color-hairline-strong;
+    color: var(--text-muted);
+    background-color: var(--bg-input);
+    border-bottom: 1px solid var(--border-strong);
   }
 
   td {
-    padding: vars.$spacing-base vars.$spacing-lg;
+    padding: var(--space-4) var(--space-6);
     font-size: 14px;
-    color: vars.$color-body;
-    border-bottom: 1px solid vars.$color-hairline;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
   }
 
@@ -143,8 +141,8 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: vars.$color-surface-strong;
-    color: vars.$color-ink;
+    background-color: var(--bg-input);
+    color: var(--text-main);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -160,12 +158,12 @@
 
   &__user-name {
     font-weight: 600;
-    color: vars.$color-ink;
+    color: var(--text-main);
   }
 
   &__user-email {
     font-size: 12px;
-    color: vars.$color-muted;
+    color: var(--text-muted);
   }
 }
 
@@ -173,7 +171,7 @@
 .users-card-list {
   display: flex;
   flex-direction: column;
-  gap: vars.$spacing-base;
+  gap: var(--space-4);
 
   @media (min-width: 768px) {
     display: none;
@@ -181,14 +179,14 @@
 }
 
 .user-item-card {
-  background-color: vars.$color-surface-card;
-  border: 1px solid vars.$color-hairline-strong;
-  border-radius: vars.$rounded-lg;
-  padding: vars.$spacing-base;
-  box-shadow: vars.$shadow-card;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
-  gap: vars.$spacing-sm;
+  gap: var(--space-3);
 
   &__header {
     display: flex;
@@ -200,8 +198,8 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: vars.$color-surface-strong;
-    color: vars.$color-ink;
+    background-color: var(--bg-input);
+    color: var(--text-main);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -218,13 +216,13 @@
 
   &__name {
     font-weight: 600;
-    color: vars.$color-ink;
+    color: var(--text-main);
     font-size: 15px;
   }
 
   &__email {
     font-size: 13px;
-    color: vars.$color-muted;
+    color: var(--text-muted);
   }
 
   &__badges {
@@ -239,9 +237,9 @@
     flex-direction: column;
     gap: 6px;
     font-size: 12px;
-    color: vars.$color-body;
-    border-top: 1px solid vars.$color-hairline;
-    padding-top: vars.$spacing-sm;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-3);
 
     div {
       display: flex;
@@ -253,9 +251,9 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: vars.$spacing-xs;
-    border-top: 1px solid vars.$color-hairline;
-    padding-top: vars.$spacing-sm;
+    gap: var(--space-2);
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-3);
   }
 }
 
@@ -263,17 +261,17 @@
 .admin-select {
   height: 32px;
   padding: 0 8px;
-  background-color: vars.$color-surface-card;
-  border: 1px solid vars.$color-hairline-strong;
-  border-radius: vars.$rounded-xs;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius);
   font-size: 12px;
-  color: vars.$color-ink;
+  color: var(--text-main);
   outline: none;
   cursor: pointer;
-  transition: border-color vars.$transition-fast;
+  transition: border-color var(--transition-smooth);
 
   &:focus {
-    border-color: vars.$color-ink;
+    border-color: var(--text-main);
   }
 }
 
@@ -289,23 +287,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: vars.$rounded-xs;
-  border: 1px solid vars.$color-hairline-strong;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-strong);
   background-color: transparent;
-  color: vars.$color-body;
+  color: var(--text-muted);
   cursor: pointer;
-  transition: all vars.$transition-fast;
+  transition: all var(--transition-smooth);
 
   &:hover {
-    color: vars.$color-ink;
-    border-color: vars.$color-ink;
-    background-color: vars.$color-canvas-soft;
+    color: var(--text-main);
+    border-color: var(--text-main);
+    background-color: var(--bg-input);
   }
 
   &--danger:hover {
-    color: vars.$color-on-primary;
-    border-color: vars.$color-error;
-    background-color: vars.$color-error;
+    color: var(--on-primary);
+    border-color: var(--danger);
+    background-color: var(--danger);
   }
 
   &:disabled {

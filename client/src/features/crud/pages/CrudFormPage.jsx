@@ -4,6 +4,7 @@ import { useEntityDefinition } from '../hooks/useEntityDefinition.js';
 import { useCrud } from '../hooks/useCrud.js';
 import AutoForm from '../components/AutoForm.jsx';
 import { useAuth } from '../../auth/hooks/useAuth.js';
+import '../styles/crud.scss';
 
 /**
  * Page displaying the auto-generated create/edit form screen.

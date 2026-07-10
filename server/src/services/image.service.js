@@ -1,7 +1,7 @@
 import ImageKit, { toFile } from '@imagekit/nodejs';
 
 import fs from 'fs';
-import envConfig from '../config/envconfig.js';
+import envConfig from '../config/envConfig.js';
 
 const imagekit = new ImageKit({
     privateKey: envConfig.IMAGEKIT_PRIVATE_KEY,

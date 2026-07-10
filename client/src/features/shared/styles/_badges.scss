@@ -1,15 +1,13 @@
-@use '../../../app/variables' as vars;
-
 .badge-pill {
   display: inline-flex;
   align-items: center;
-  background-color: vars.$color-surface-strong;
-  color: vars.$color-ink;
+  background-color: var(--bg-input);
+  color: var(--text-main);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.88px;
   text-transform: uppercase;
-  border-radius: vars.$rounded-pill;
+  border-radius: var(--rounded-pill);
   padding: 4px 10px;
   line-height: 1.4;
 
@@ -20,7 +18,7 @@
 
   &--active {
     background-color: #f0fdf4;
-    color: vars.$color-success;
+    color: var(--success);
   }
 
   &--deleted {

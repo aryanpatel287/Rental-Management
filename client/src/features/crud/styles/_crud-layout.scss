@@ -1,19 +1,17 @@
-@use '../../../app/variables' as vars;
-
 .crud-list-page,
 .crud-form-page {
-  padding: vars.$spacing-xl;
+  padding: var(--space-8);
   max-width: 1200px;
   margin: 0 auto;
-  animation: fadeIn vars.$transition-base;
+  animation: fadeIn var(--transition-smooth);
 }
 
 .crud-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: vars.$spacing-xl;
-  gap: vars.$spacing-md;
+  margin-bottom: var(--space-8);
+  gap: var(--space-5);
 
   @media (max-width: 640px) {
     flex-direction: column;
@@ -25,20 +23,20 @@
   }
 
   &__description {
-    margin-top: vars.$spacing-xs;
-    color: vars.$color-body;
+    margin-top: var(--space-2);
+    color: var(--text-muted);
   }
 
   &__actions {
     display: flex;
-    gap: vars.$spacing-sm;
+    gap: var(--space-3);
   }
 }
 
 .crud-content {
-  background-color: vars.$color-surface-card;
-  border: 1px solid vars.$color-hairline-strong;
-  border-radius: vars.$rounded-lg;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
 }
 
@@ -51,14 +49,14 @@
 }
 
 .table-controls {
-  padding: vars.$spacing-base vars.$spacing-lg;
-  border-bottom: 1px solid vars.$color-hairline;
-  background-color: vars.$color-canvas-soft;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-input);
 }
 
 .table-search-form {
   display: flex;
-  gap: vars.$spacing-sm;
+  gap: var(--space-3);
   max-width: 500px;
 }
 
@@ -70,8 +68,8 @@
 
   .search-icon {
     position: absolute;
-    left: vars.$spacing-sm;
-    color: vars.$color-muted;
+    left: var(--space-3);
+    color: var(--text-muted);
     font-size: 16px;
     pointer-events: none;
   }
@@ -85,19 +83,19 @@
 
   .clear-search-btn {
     position: absolute;
-    right: vars.$spacing-sm;
+    right: var(--space-3);
     background: none;
     border: none;
-    color: vars.$color-muted-soft;
+    color: var(--text-muted);
     cursor: pointer;
     font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color vars.$transition-fast;
+    transition: color var(--transition-smooth);
 
     &:hover {
-      color: vars.$color-ink;
+      color: var(--text-main);
     }
   }
 }
@@ -118,32 +116,32 @@
   font-size: 14px;
 
   th {
-    background-color: vars.$color-canvas-soft;
-    color: vars.$color-ink;
+    background-color: var(--bg-input);
+    color: var(--text-main);
     font-weight: 600;
-    padding: vars.$spacing-base vars.$spacing-lg;
-    border-bottom: 1px solid vars.$color-hairline-strong;
-    font-family: vars.$font-sans;
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--border-strong);
+    font-family: var(--font-family);
   }
 
   td {
-    padding: vars.$spacing-base vars.$spacing-lg;
-    border-bottom: 1px solid vars.$color-hairline;
-    color: vars.$color-body;
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
     vertical-align: middle;
   }
 
   .table-row {
-    transition: background-color vars.$transition-fast;
+    transition: background-color var(--transition-smooth);
 
     &:hover {
-      background-color: vars.$color-canvas-soft;
+      background-color: var(--bg-input);
     }
   }
 }
 
 .cell-empty {
-  color: vars.$color-muted-soft;
+  color: var(--text-muted);
 }
 
 .actions-header {
@@ -158,20 +156,20 @@
 .table-action-btn {
   background: none;
   border: none;
-  color: vars.$color-body;
+  color: var(--text-muted);
   cursor: pointer;
-  padding: vars.$spacing-xs;
+  padding: var(--space-2);
   font-size: 16px;
-  border-radius: vars.$rounded-sm;
-  transition: all vars.$transition-fast;
+  border-radius: var(--rounded-sm);
+  transition: all var(--transition-smooth);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: vars.$spacing-xxs;
+  margin-left: var(--space-1);
 
   &:hover {
-    background-color: vars.$color-surface-strong;
-    color: vars.$color-ink;
+    background-color: var(--bg-input);
+    color: var(--text-main);
   }
 
   &.delete-action:hover {
@@ -184,14 +182,14 @@
 .table-empty-cell {
   padding: 48px !important;
   text-align: center;
-  color: vars.$color-muted;
+  color: var(--text-muted);
 }
 
 .table-empty-cell {
   .empty-icon {
     font-size: 32px;
-    margin-bottom: vars.$spacing-xs;
-    color: vars.$color-muted-soft;
+    margin-bottom: var(--space-2);
+    color: var(--text-muted);
     display: block;
   }
 }
@@ -200,11 +198,11 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-  border: 2px solid vars.$color-hairline-strong;
-  border-top-color: vars.$color-primary;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  margin-bottom: vars.$spacing-xs;
+  margin-bottom: var(--space-2);
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -217,33 +215,33 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: vars.$spacing-base vars.$spacing-lg;
-  border-top: 1px solid vars.$color-hairline;
-  background-color: vars.$color-canvas-soft;
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-input);
 
   @media (max-width: 640px) {
     flex-direction: column;
-    gap: vars.$spacing-sm;
+    gap: var(--space-3);
     text-align: center;
   }
 }
 
 .pagination-info {
   font-size: 13px;
-  color: vars.$color-body;
+  color: var(--text-muted);
 }
 
 .pagination-buttons {
   display: flex;
-  gap: vars.$spacing-xs;
+  gap: var(--space-2);
 }
 
 .pagination-btn {
   height: 36px;
-  padding: 0 vars.$spacing-base;
+  padding: 0 var(--space-4);
   display: flex;
   align-items: center;
-  gap: vars.$spacing-xxs;
+  gap: var(--space-1);
 
   i {
     font-size: 16px;
@@ -254,91 +252,91 @@
 // AutoForm & Form Groups
 // ----------------------------------------------------
 .crud-form-card {
-  background-color: vars.$color-surface-card;
-  border: 1px solid vars.$color-hairline-strong;
-  border-radius: vars.$rounded-lg;
-  padding: vars.$spacing-xl;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-8);
 }
 
 .auto-form {
   &__fields {
     display: grid;
     grid-template-columns: 1fr;
-    gap: vars.$spacing-lg;
-    margin-bottom: vars.$spacing-xl;
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
   }
 
   &__actions {
     display: flex;
     justify-content: flex-end;
-    gap: vars.$spacing-sm;
-    padding-top: vars.$spacing-lg;
-    border-top: 1px solid vars.$color-hairline;
+    gap: var(--space-3);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-color);
   }
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: vars.$spacing-xs;
+  gap: var(--space-2);
 
   &--checkbox {
     flex-direction: row;
     align-items: center;
-    padding: vars.$spacing-xs 0;
+    padding: var(--space-2) 0;
   }
 }
 
 .form-label {
   font-size: 14px;
   font-weight: 500;
-  color: vars.$color-ink;
+  color: var(--text-main);
 
   .required-star {
-    color: vars.$color-error;
+    color: var(--danger);
   }
 }
 
 .text-input--error {
-  border-color: vars.$color-error !important;
+  border-color: var(--danger) !important;
 
   &:focus {
-    box-shadow: 0 0 0 2px rgba(235, 142, 144, 0.2) !important;
+    box-shadow: 0 0 0 2px rgba(230, 91, 101, 0.2) !important;
   }
 }
 
 .field-error-message {
   font-size: 12px;
-  color: vars.$color-error;
-  margin-top: vars.$spacing-xxs;
+  color: var(--danger);
+  margin-top: var(--space-1);
   display: flex;
   align-items: center;
-  gap: vars.$spacing-xxs;
+  gap: var(--space-1);
 }
 
 .checkbox-field {
   display: flex;
   align-items: center;
-  gap: vars.$spacing-sm;
+  gap: var(--space-3);
   cursor: pointer;
 
   &__input {
     width: 18px;
     height: 18px;
-    border: 1px solid vars.$color-hairline-strong;
-    border-radius: vars.$rounded-xs;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--border-radius);
     cursor: pointer;
 
     &:checked {
-      background-color: vars.$color-primary;
-      border-color: vars.$color-primary;
+      background-color: var(--primary);
+      border-color: var(--primary);
     }
   }
 
   &__label {
     font-size: 14px;
     font-weight: 500;
-    color: vars.$color-ink;
+    color: var(--text-main);
     user-select: none;
     cursor: pointer;
   }
@@ -348,25 +346,25 @@
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18' fill='%2360646c'%3E%3Cpath d='M12 16L6 10H18L12 16Z'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right vars.$spacing-base center;
+  background-position: right var(--space-4) center;
   padding-right: 40px;
 }
 
 .form-spinner {
   animation: spin 0.8s linear infinite;
-  margin-right: vars.$spacing-xs;
+  margin-right: var(--space-3);
 }
 
 .crud-inline-error {
   display: flex;
   align-items: center;
-  gap: vars.$spacing-sm;
+  gap: var(--space-3);
   background-color: #fef2f2;
   border: 1px solid #fecaca;
   color: #b91c1c;
-  padding: vars.$spacing-base vars.$spacing-lg;
-  border-radius: vars.$rounded-md;
-  margin: vars.$spacing-base vars.$spacing-lg;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--rounded-md);
+  margin: var(--space-4) var(--space-6);
   font-size: 14px;
 }
 
@@ -376,16 +374,16 @@
   align-items: center;
   justify-content: center;
   padding: 96px;
-  color: vars.$color-muted;
+  color: var(--text-muted);
 
   .spinner {
     width: 32px;
     height: 32px;
-    border: 2px solid vars.$color-hairline-strong;
-    border-top-color: vars.$color-primary;
+    border: 2px solid var(--border-strong);
+    border-top-color: var(--primary);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-    margin-bottom: vars.$spacing-base;
+    margin-bottom: var(--space-4);
   }
 }
 
@@ -398,26 +396,26 @@
   padding: 64px;
   max-width: 500px;
   margin: 96px auto;
-  background-color: vars.$color-surface-card;
-  border: 1px solid vars.$color-hairline-strong;
-  border-radius: vars.$rounded-lg;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-lg);
 
   .error-icon {
     font-size: 48px;
-    color: vars.$color-error;
-    margin-bottom: vars.$spacing-base;
+    color: var(--danger);
+    margin-bottom: var(--space-4);
   }
 
   h2 {
     font-size: 20px;
     font-weight: 600;
-    margin-bottom: vars.$spacing-sm;
-    color: vars.$color-ink;
+    margin-bottom: var(--space-3);
+    color: var(--text-main);
   }
 
   p {
-    color: vars.$color-body;
-    margin-bottom: vars.$spacing-lg;
+    color: var(--text-muted);
+    margin-bottom: var(--space-8);
   }
 }
 

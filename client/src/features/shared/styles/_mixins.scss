@@ -1,0 +1,98 @@
+@use 'sass:map';
+@use './variables' as vars;
+
+@mixin flex($justify: center, $align: center, $direction: row, $gap: 0) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+    gap: $gap;
+}
+
+// Responsive media queries
+@mixin respond-to($breakpoint) {
+    @if map.has-key(vars.$breakpoints, $breakpoint) {
+        @media (min-width: map.get(vars.$breakpoints, $breakpoint)) {
+            @content;
+        }
+    } @else {
+        @warn "Unknown breakpoint: #{$breakpoint}";
+    }
+}
+
+@mixin respond-below($breakpoint) {
+    @if map.has-key(vars.$breakpoints, $breakpoint) {
+        @media (max-width: (map.get(vars.$breakpoints, $breakpoint) - 1px)) {
+            @content;
+        }
+    } @else {
+        @warn "Unknown breakpoint: #{$breakpoint}";
+    }
+}
+
+// Typography Hierarchies
+@mixin heading-xl {
+    font-family: var(--font-family);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-xl);
+    letter-spacing: -0.03em;
+}
+
+@mixin heading-lg {
+    font-family: var(--font-family);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-lg);
+    letter-spacing: 0;
+}
+
+@mixin heading-md {
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-md);
+    letter-spacing: 0;
+}
+
+@mixin heading-sm {
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-sm);
+    letter-spacing: 0;
+}
+
+@mixin body-md {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base);
+    letter-spacing: 0;
+}
+
+@mixin body-sm {
+    font-family: var(--font-family);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-body-sm);
+    letter-spacing: 0;
+}
+
+@mixin caption {
+    font-family: var(--font-family);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-caption);
+    letter-spacing: 0;
+}
+
+@mixin label {
+    font-family: var(--font-family);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-label);
+    letter-spacing: 0;
+}
+
+

@@ -1,6 +1,6 @@
 import redis from '../../../config/cache.js';
 import { verifyToken } from '../utils/jwt.js';
-import { getUserById } from '../../../db/query/users.query.db.js';
+import { getUserById } from '../../../dao/user.dao.js';
 import { sendResponse } from '../../../utils/response.utlis.js';
 
 /**

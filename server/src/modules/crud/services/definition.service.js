@@ -1,25 +1,16 @@
 import { db } from '../../../config/database.js';
-import { entityDefinitions, fieldDefinitions } from '../schema/crud.schema.js';
-import { eq, asc } from 'drizzle-orm';
 import { createEntityTable, dropEntityTable, alterEntityTable } from './table-manager.service.js';
+import * as definitionDAO from '../../../dao/definition.dao.js';
 
 /**
  * Get entity and its field definitions by slug
  * @param {string} slug 
  */
 export async function getEntityBySlug(slug) {
-    const [entity] = await db
-        .select()
-        .from(entityDefinitions)
-        .where(eq(entityDefinitions.slug, slug.toLowerCase()));
-        
+    const entity = await definitionDAO.findEntityBySlug(slug);
     if (!entity) return null;
 
-    const fields = await db
-        .select()
-        .from(fieldDefinitions)
-        .where(eq(fieldDefinitions.entityId, entity.id))
-        .orderBy(asc(fieldDefinitions.sortOrder));
+    const fields = await definitionDAO.findFieldsByEntityId(entity.id);
 
     return {
         ...entity,
@@ -31,7 +22,7 @@ export async function getEntityBySlug(slug) {
  * List all entity definitions
  */
 export async function listEntities() {
-    return db.select().from(entityDefinitions).orderBy(asc(entityDefinitions.name));
+    return definitionDAO.findAllEntities();
 }
 
 /**
@@ -44,16 +35,13 @@ export async function createEntity(entityData) {
 
     return db.transaction(async (tx) => {
         // 1. Insert entity definition metadata
-        const [entity] = await tx
-            .insert(entityDefinitions)
-            .values({
-                name,
-                slug: lowerSlug,
-                tableName,
-                description,
-                isActive: true
-            })
-            .returning();
+        const entity = await definitionDAO.insertEntity({
+            name,
+            slug: lowerSlug,
+            tableName,
+            description,
+            isActive: true
+        }, tx);
 
         // 2. Insert fields metadata
         const fieldValues = fields.map((f, index) => ({
@@ -70,10 +58,7 @@ export async function createEntity(entityData) {
             sortOrder: f.sortOrder ?? index
         }));
 
-        const insertedFields = await tx
-            .insert(fieldDefinitions)
-            .values(fieldValues)
-            .returning();
+        const insertedFields = await definitionDAO.insertFields(fieldValues, tx);
 
         // 3. Create physical database table
         await createEntityTable(lowerSlug, fieldValues);
@@ -99,21 +84,14 @@ export async function updateEntity(slug, updateData) {
 
     return db.transaction(async (tx) => {
         // 1. Update main definition metadata
-        const [updatedEntity] = await tx
-            .update(entityDefinitions)
-            .set({
-                name: name || existing.name,
-                description: description !== undefined ? description : existing.description,
-                updatedAt: new Date()
-            })
-            .where(eq(entityDefinitions.id, existing.id))
-            .returning();
+        const updatedEntity = await definitionDAO.updateEntityMetadata(existing.id, {
+            name: name || existing.name,
+            description: description !== undefined ? description : existing.description
+        }, tx);
 
         if (fields) {
             // Delete existing fields metadata first
-            await tx
-                .delete(fieldDefinitions)
-                .where(eq(fieldDefinitions.entityId, existing.id));
+            await definitionDAO.deleteFieldsByEntityId(existing.id, tx);
 
             // Insert new fields metadata
             const fieldValues = fields.map((f, index) => ({
@@ -130,10 +108,7 @@ export async function updateEntity(slug, updateData) {
                 sortOrder: f.sortOrder ?? index
             }));
 
-            const insertedFields = await tx
-                .insert(fieldDefinitions)
-                .values(fieldValues)
-                .returning();
+            const insertedFields = await definitionDAO.insertFields(fieldValues, tx);
 
             // Run database migration to alter table schema
             await alterEntityTable(lowerSlug, existing.fields, fieldValues);
@@ -166,9 +141,7 @@ export async function deleteEntity(slug) {
         await dropEntityTable(lowerSlug);
 
         // 2. Delete definition metadata (will cascade delete field definitions in DB)
-        await tx
-            .delete(entityDefinitions)
-            .where(eq(entityDefinitions.id, existing.id));
+        await definitionDAO.deleteEntityBySlug(lowerSlug, tx);
 
         return { slug: lowerSlug, success: true };
     });

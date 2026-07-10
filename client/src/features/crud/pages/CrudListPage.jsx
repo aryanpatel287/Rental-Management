@@ -4,6 +4,7 @@ import { useEntityDefinition } from '../hooks/useEntityDefinition.js';
 import { useCrud } from '../hooks/useCrud.js';
 import AutoTable from '../components/AutoTable.jsx';
 import { useAuth } from '../../auth/hooks/useAuth.js';
+import '../styles/crud.scss';
 
 /**
  * Page displaying the data grid/table list view of any dynamic entity.

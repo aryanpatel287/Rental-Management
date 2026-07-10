@@ -10,7 +10,14 @@ import path from 'path';
 const logFilePath = path.resolve('../.ai/API_RESPONSE.md');
 const moduleLogs = [];
 
-function queueApiResponse(testName, method, endpoint, requestBody, statusCode, responseBody) {
+function queueApiResponse(
+    testName,
+    method,
+    endpoint,
+    requestBody,
+    statusCode,
+    responseBody,
+) {
     const markdown = `
 ### ${testName}
 - **Request**: \`${method} ${endpoint}\`
@@ -36,7 +43,8 @@ function logModuleResponses(moduleName, logs) {
             content = fs.readFileSync(logFilePath, 'utf8');
         }
 
-        const titleHeader = '# API Response Logs\n\nGenerated automatically during integration test runs.\n\n';
+        const titleHeader =
+            '# API Response Logs\n\nGenerated automatically during integration test runs.\n\n';
         if (!content.trim()) {
             content = titleHeader;
         } else if (!content.startsWith('# API Response Logs')) {
@@ -51,8 +59,14 @@ function logModuleResponses(moduleName, logs) {
             const rest = content.slice(moduleIndex + moduleHeader.length);
             const nextModuleMatch = rest.match(/\n## /);
             if (nextModuleMatch) {
-                const nextModuleIndex = moduleIndex + moduleHeader.length + nextModuleMatch.index;
-                content = content.slice(0, moduleIndex) + newSection + '\n' + content.slice(nextModuleIndex).trim() + '\n';
+                const nextModuleIndex =
+                    moduleIndex + moduleHeader.length + nextModuleMatch.index;
+                content =
+                    content.slice(0, moduleIndex) +
+                    newSection +
+                    '\n' +
+                    content.slice(nextModuleIndex).trim() +
+                    '\n';
             } else {
                 content = content.slice(0, moduleIndex) + newSection + '\n';
             }
@@ -98,7 +112,14 @@ describe('Authentication Module Integration Tests', () => {
                 .post('/api/auth/register')
                 .send(testUser);
 
-            queueApiResponse('User Registration Success', 'POST', '/api/auth/register', testUser, res.statusCode, res.body);
+            queueApiResponse(
+                'User Registration Success',
+                'POST',
+                '/api/auth/register',
+                testUser,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(201);
             expect(res.body.success).toBe(true);
@@ -120,7 +141,14 @@ describe('Authentication Module Integration Tests', () => {
                 .post('/api/auth/register')
                 .send(invalidData);
 
-            queueApiResponse('User Registration Validation Failure', 'POST', '/api/auth/register', invalidData, res.statusCode, res.body);
+            queueApiResponse(
+                'User Registration Validation Failure',
+                'POST',
+                '/api/auth/register',
+                invalidData,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(400);
             expect(res.body.success).toBe(false);
@@ -132,11 +160,11 @@ describe('Authentication Module Integration Tests', () => {
     describe('POST /api/auth/login', () => {
         beforeEach(async () => {
             const salt = await bcrypt.genSalt(10);
-            const passwordHash = await bcrypt.hash(testUser.password, salt);
+            const password = await bcrypt.hash(testUser.password, salt);
             await db.insert(users).values({
                 name: testUser.name,
                 email: testUser.email,
-                password: passwordHash,
+                password,
                 role: 'USER',
             });
         });
@@ -150,7 +178,14 @@ describe('Authentication Module Integration Tests', () => {
                 .post('/api/auth/login')
                 .send(loginData);
 
-            queueApiResponse('User Login Success', 'POST', '/api/auth/login', loginData, res.statusCode, res.body);
+            queueApiResponse(
+                'User Login Success',
+                'POST',
+                '/api/auth/login',
+                loginData,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(200);
             expect(res.body.success).toBe(true);
@@ -168,7 +203,14 @@ describe('Authentication Module Integration Tests', () => {
                 .post('/api/auth/login')
                 .send(loginData);
 
-            queueApiResponse('User Login Failure (Wrong Password)', 'POST', '/api/auth/login', loginData, res.statusCode, res.body);
+            queueApiResponse(
+                'User Login Failure (Wrong Password)',
+                'POST',
+                '/api/auth/login',
+                loginData,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(401);
             expect(res.body.success).toBe(false);
@@ -181,11 +223,11 @@ describe('Authentication Module Integration Tests', () => {
 
         beforeEach(async () => {
             const salt = await bcrypt.genSalt(10);
-            const passwordHash = await bcrypt.hash(testUser.password, salt);
+            const password = await bcrypt.hash(testUser.password, salt);
             await db.insert(users).values({
                 name: testUser.name,
                 email: testUser.email,
-                password: passwordHash,
+                password,
                 role: 'USER',
             });
 
@@ -200,7 +242,14 @@ describe('Authentication Module Integration Tests', () => {
                 .post('/api/auth/logout')
                 .set('Cookie', cookie);
 
-            queueApiResponse('User Logout Success', 'POST', '/api/auth/logout', null, res.statusCode, res.body);
+            queueApiResponse(
+                'User Logout Success',
+                'POST',
+                '/api/auth/logout',
+                null,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(200);
             expect(res.body.success).toBe(true);
@@ -210,10 +259,19 @@ describe('Authentication Module Integration Tests', () => {
                 .get('/api/auth/me')
                 .set('Cookie', cookie);
 
-            queueApiResponse('Access Profile with Blacklisted Token', 'GET', '/api/auth/me', null, protectRes.statusCode, protectRes.body);
+            queueApiResponse(
+                'Access Profile with Blacklisted Token',
+                'GET',
+                '/api/auth/me',
+                null,
+                protectRes.statusCode,
+                protectRes.body,
+            );
 
             expect(protectRes.statusCode).toBe(401);
-            expect(protectRes.body.message).toContain('Your session has expired or been logged out');
+            expect(protectRes.body.message).toContain(
+                'Your session has expired or been logged out',
+            );
         });
     });
 
@@ -223,7 +281,7 @@ describe('Authentication Module Integration Tests', () => {
 
         beforeEach(async () => {
             const salt = await bcrypt.genSalt(10);
-            
+
             await db.insert(users).values({
                 name: testUser.name,
                 email: testUser.email,
@@ -254,7 +312,14 @@ describe('Authentication Module Integration Tests', () => {
                 .get('/api/auth/me')
                 .set('Cookie', userCookie);
 
-            queueApiResponse('Get Current User (Success)', 'GET', '/api/auth/me', null, res.statusCode, res.body);
+            queueApiResponse(
+                'Get Current User (Success)',
+                'GET',
+                '/api/auth/me',
+                null,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(200);
             expect(res.body.success).toBe(true);
@@ -262,10 +327,16 @@ describe('Authentication Module Integration Tests', () => {
         });
 
         it('should deny profile access to unauthenticated requests', async () => {
-            const res = await request(app)
-                .get('/api/auth/me');
+            const res = await request(app).get('/api/auth/me');
 
-            queueApiResponse('Get Current User (Unauthenticated)', 'GET', '/api/auth/me', null, res.statusCode, res.body);
+            queueApiResponse(
+                'Get Current User (Unauthenticated)',
+                'GET',
+                '/api/auth/me',
+                null,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(401);
             expect(res.body.success).toBe(false);
@@ -276,7 +347,14 @@ describe('Authentication Module Integration Tests', () => {
                 .get('/api/auth/users')
                 .set('Cookie', userCookie);
 
-            queueApiResponse('List Users as User (RBAC Denied)', 'GET', '/api/auth/users', null, res.statusCode, res.body);
+            queueApiResponse(
+                'List Users as User (RBAC Denied)',
+                'GET',
+                '/api/auth/users',
+                null,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(403);
             expect(res.body.success).toBe(false);
@@ -288,7 +366,14 @@ describe('Authentication Module Integration Tests', () => {
                 .get('/api/auth/users')
                 .set('Cookie', adminCookie);
 
-            queueApiResponse('List Users as Admin (Success)', 'GET', '/api/auth/users', null, res.statusCode, res.body);
+            queueApiResponse(
+                'List Users as Admin (Success)',
+                'GET',
+                '/api/auth/users',
+                null,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(200);
             expect(res.body.success).toBe(true);
@@ -303,13 +388,16 @@ describe('Authentication Module Integration Tests', () => {
 
         beforeEach(async () => {
             const salt = await bcrypt.genSalt(10);
-            const passwordHash = await bcrypt.hash(testUser.password, salt);
-            const [user] = await db.insert(users).values({
-                name: testUser.name,
-                email: testUser.email,
-                password: passwordHash,
-                role: 'USER',
-            }).returning();
+            const password = await bcrypt.hash(testUser.password, salt);
+            const [user] = await db
+                .insert(users)
+                .values({
+                    name: testUser.name,
+                    email: testUser.email,
+                    password,
+                    role: 'USER',
+                })
+                .returning();
             userId = user.id;
 
             const loginRes = await request(app)
@@ -325,7 +413,14 @@ describe('Authentication Module Integration Tests', () => {
                 .set('Cookie', cookie)
                 .send(updateData);
 
-            queueApiResponse('Update Profile Name', 'PATCH', '/api/auth/profile', updateData, res.statusCode, res.body);
+            queueApiResponse(
+                'Update Profile Name',
+                'PATCH',
+                '/api/auth/profile',
+                updateData,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(200);
             expect(res.body.data.user.name).toBe('John Updated');
@@ -341,16 +436,21 @@ describe('Authentication Module Integration Tests', () => {
                 .set('Cookie', cookie)
                 .send(passData);
 
-            queueApiResponse('Change Password', 'PATCH', '/api/auth/change-password', passData, res.statusCode, res.body);
+            queueApiResponse(
+                'Change Password',
+                'PATCH',
+                '/api/auth/change-password',
+                passData,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(200);
 
-            const loginRes = await request(app)
-                .post('/api/auth/login')
-                .send({
-                    email: testUser.email,
-                    password: 'newpassword123',
-                });
+            const loginRes = await request(app).post('/api/auth/login').send({
+                email: testUser.email,
+                password: 'newpassword123',
+            });
             expect(loginRes.statusCode).toBe(200);
         });
 
@@ -359,7 +459,14 @@ describe('Authentication Module Integration Tests', () => {
                 .delete('/api/auth/account')
                 .set('Cookie', cookie);
 
-            queueApiResponse('Self Soft-Delete Account', 'DELETE', '/api/auth/account', null, res.statusCode, res.body);
+            queueApiResponse(
+                'Self Soft-Delete Account',
+                'DELETE',
+                '/api/auth/account',
+                null,
+                res.statusCode,
+                res.body,
+            );
 
             expect(res.statusCode).toBe(200);
 
@@ -368,17 +475,24 @@ describe('Authentication Module Integration Tests', () => {
                 .set('Cookie', cookie);
             expect(meRes.statusCode).toBe(401);
 
-            const loginRes = await request(app)
-                .post('/api/auth/login')
-                .send({
-                    email: testUser.email,
-                    password: testUser.password,
-                });
-            
-            queueApiResponse('Login Attempt as Deleted User', 'POST', '/api/auth/login', { email: testUser.email, password: testUser.password }, loginRes.statusCode, loginRes.body);
+            const loginRes = await request(app).post('/api/auth/login').send({
+                email: testUser.email,
+                password: testUser.password,
+            });
+
+            queueApiResponse(
+                'Login Attempt as Deleted User',
+                'POST',
+                '/api/auth/login',
+                { email: testUser.email, password: testUser.password },
+                loginRes.statusCode,
+                loginRes.body,
+            );
 
             expect(loginRes.statusCode).toBe(401);
-            expect(loginRes.body.message).toContain('Invalid email or password');
+            expect(loginRes.body.message).toContain(
+                'Invalid email or password',
+            );
         });
     });
 });

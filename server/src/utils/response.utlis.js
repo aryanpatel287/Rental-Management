@@ -38,7 +38,7 @@ export async function sendTokenResponse(res, statusCode, message, user) {
     const token = jwt.sign(
         { id: user.id, email: user.email, role: user.role },
         envConfig.JWT_SECRET,
-        { expiresIn: '24h' }
+        { expiresIn: '24h' },
     );
 
     setTokenCookie(res, token);
@@ -48,17 +48,15 @@ export async function sendTokenResponse(res, statusCode, message, user) {
         statusCode,
         message,
         success: true,
-        data: {
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                isActive: user.isActive,
-                emailVerified: user.emailVerified,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-            },
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            isActive: user.isActive,
+            emailVerified: user.emailVerified,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
         },
     });
 }

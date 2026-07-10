@@ -1,60 +1,44 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router';
-import { useAuth } from '../hooks/useAuth.js';
+import { useAuth } from '../hooks/useAuth';
 
-/**
- * Route protection wrapper component
- */
-const ProtectedRoute = ({ children, requireAdmin = false }) => {
-  const { user, isAuthenticated, loading } = useAuth();
+const ProtectedRoute = ({ children }) => {
+    const { user, loading, error, handleGetMe } = useAuth();
+    const [hasChecked, setHasChecked] = useState(false);
+    const hasRequestedRef = useRef(false);
 
-  // Show premium minimalist loading screen while restoring session
-  if (loading) {
-    return (
-      <div 
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-          width: '100vw',
-          backgroundColor: '#ffffff',
-          color: '#171717',
-        }}
-        aria-live="polite"
-      >
-        <div 
-          style={{
-            width: '40px',
-            height: '40px',
-            border: '2px solid #f0f0f3',
-            borderTop: '2px solid #171717',
-            borderRadius: '50%',
-            animation: 'spin 0.8s linear infinite',
-            marginBottom: '16px',
-          }}
-        />
-        <p style={{ fontSize: '14px', fontWeight: 500, letterSpacing: '0.5px' }}>Loading session…</p>
-        <style>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </div>
-    );
-  }
+    useEffect(() => {
+        if (hasRequestedRef.current) {
+            return;
+        }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+        hasRequestedRef.current = true;
 
-  if (requireAdmin && user?.role !== 'ADMIN') {
-    return <Navigate to="/forbidden" replace />;
-  }
+        const loadUser = async () => {
+            try {
+                await handleGetMe();
+            } finally {
+                setHasChecked(true);
+            }
+        };
 
-  return children;
+        loadUser();
+    }, [handleGetMe]);
+
+    if (!hasChecked || (loading && !error && !user)) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        console.error('Error fetching user data:', error);
+        return <Navigate to="/login" replace />;
+    }
+
+    if (!user && !loading) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return children;
 };
 
 export default ProtectedRoute;

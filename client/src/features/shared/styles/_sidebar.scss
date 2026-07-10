@@ -1,11 +1,9 @@
-@use '../../../app/variables' as vars;
-
 // Sidebar main container
 .sidebar {
   display: flex;
   flex-direction: column;
-  background-color: vars.$color-surface-card;
-  border-right: 1px solid vars.$color-hairline-strong;
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border-strong);
   width: 260px;
   height: 100vh;
   position: sticky;
@@ -33,13 +31,13 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    border-bottom: 1px solid vars.$color-hairline;
+    border-bottom: 1px solid var(--border-color);
     text-decoration: none;
-    color: vars.$color-ink;
+    color: var(--text-main);
 
     i {
       font-size: 20px;
-      color: vars.$color-ink;
+      color: var(--text-main);
     }
 
     span {
@@ -63,29 +61,29 @@
     align-items: center;
     gap: 12px;
     padding: 10px 16px;
-    color: vars.$color-body;
+    color: var(--text-muted);
     font-size: 14px;
     font-weight: 500;
-    border-radius: vars.$rounded-md;
-    transition: all vars.$transition-fast;
+    border-radius: var(--rounded-md);
+    transition: all var(--transition-smooth);
 
     i {
       font-size: 18px;
-      transition: color vars.$transition-fast;
+      transition: color var(--transition-smooth);
     }
 
     &:hover {
-      background-color: vars.$color-canvas-soft;
-      color: vars.$color-ink;
+      background-color: var(--bg-input);
+      color: var(--text-main);
     }
 
     &--active {
-      background-color: vars.$color-surface-strong;
-      color: vars.$color-ink;
+      background-color: var(--bg-input);
+      color: var(--text-main);
       font-weight: 600;
 
       i {
-        color: vars.$color-ink;
+        color: var(--text-main);
       }
     }
   }
@@ -93,7 +91,7 @@
   // User Profile + Log Out footer
   &__footer {
     padding: 20px 16px;
-    border-top: 1px solid vars.$color-hairline;
+    border-top: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -109,8 +107,8 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: vars.$color-surface-strong;
-    color: vars.$color-ink;
+    background-color: var(--bg-input);
+    color: var(--text-main);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -127,7 +125,7 @@
   &__user-name {
     font-size: 13px;
     font-weight: 600;
-    color: vars.$color-ink;
+    color: var(--text-main);
   }
 
   &__role-badge {
@@ -149,8 +147,8 @@
 .sidebar-mobile-bar {
   display: none;
   height: 56px;
-  background-color: vars.$color-surface-card;
-  border-bottom: 1px solid vars.$color-hairline-strong;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-strong);
   padding: 0 16px;
   align-items: center;
   justify-content: space-between;
@@ -166,7 +164,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: vars.$color-ink;
+    color: var(--text-main);
     font-weight: 600;
     font-size: 15px;
     text-decoration: none;
@@ -180,17 +178,17 @@
     background: none;
     border: none;
     font-size: 22px;
-    color: vars.$color-ink;
+    color: var(--text-main);
     cursor: pointer;
     padding: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: vars.$rounded-sm;
-    transition: background-color vars.$transition-fast;
+    border-radius: var(--rounded-sm);
+    transition: background-color var(--transition-smooth);
 
     &:hover {
-      background-color: vars.$color-canvas-soft;
+      background-color: var(--bg-input);
     }
   }
 }
@@ -220,7 +218,7 @@
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
-  background-color: vars.$color-canvas;
+  background-color: var(--bg-app);
   flex-direction: row;
 
   @media (max-width: 767px) {
@@ -239,4 +237,3 @@
     padding: 24px 16px;
   }
 }
-

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDashboard } from '../hooks/useDashboard.js';
 import DashboardRenderer from '../components/DashboardRenderer.jsx';
 import { useAuth } from '../../auth/hooks/useAuth.js';
+import '../styles/dashboard.scss';
 
 /**
  * Main dashboard routing page. Displays role-based metrics, feeds, charts, and actions.

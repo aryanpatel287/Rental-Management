@@ -1,5 +1,5 @@
-import { db } from '../../config/database.js';
-import { users } from '../schema/users.schema.js';
+import { db } from '../config/database.js';
+import { users } from '../db/schema/users.schema.js';
 import { eq, and } from 'drizzle-orm';
 
 /**
@@ -17,7 +17,7 @@ export async function getUserByEmail(email, includeDeleted = false) {
 }
 
 /**
- * Get user by id
+ * Get user by ID
  * @param {string} id
  * @param {boolean} includeDeleted
  */
@@ -31,7 +31,7 @@ export async function getUserById(id, includeDeleted = false) {
 }
 
 /**
- * Create a new user
+ * Create a new user record
  * @param {object} userData
  */
 export async function createUser(userData) {

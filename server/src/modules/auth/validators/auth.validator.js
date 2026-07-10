@@ -76,3 +76,44 @@ export const updateRoleValidator = [
         .withMessage('Role must be either USER or ADMIN'),
     validateRequest,
 ];
+
+export const forgotPasswordValidator = [
+    body('email')
+        .trim()
+        .notEmpty()
+        .isEmail()
+        .withMessage('Valid email is required.'),
+    validateRequest,
+];
+
+export const resetPasswordValidator = [
+    body('email')
+        .trim()
+        .notEmpty()
+        .isEmail()
+        .withMessage('Valid email is required.'),
+    body('otp')
+        .trim()
+        .notEmpty()
+        .withMessage('OTP is required.')
+        .isLength({ min: 6, max: 6 })
+        .withMessage('OTP must be exactly 6 characters long.'),
+    body('password')
+        .trim()
+        .notEmpty()
+        .withMessage('Password is required.')
+        .isLength({ min: 8 })
+        .withMessage('Password must be at least 8 characters long.')
+        .matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/)
+        .withMessage(
+            'Password must include at least one uppercase letter, one number, and one special character.',
+        ),
+    body('confirmPassword')
+        .trim()
+        .notEmpty()
+        .withMessage('Confirm password is required.')
+        .custom((value, { req }) => value === req.body.password)
+        .withMessage('Passwords do not match.'),
+    validateRequest,
+];
+

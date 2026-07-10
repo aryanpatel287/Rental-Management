@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../auth/hooks/useAuth.js';
 import { useAdmin } from '../hooks/useAdmin.js';
+import '../styles/admin.scss';
 
 /**
  * AdminDashboardPage view

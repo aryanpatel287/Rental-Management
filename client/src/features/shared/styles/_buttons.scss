@@ -1,93 +1,83 @@
-@use '../../../app/variables' as vars;
+@mixin button-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-smooth);
 
-.button-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: vars.$color-primary;
-  color: vars.$color-on-primary;
-  font-size: 14px;
-  font-weight: 500;
-  height: 40px;
-  padding: 10px 18px;
-  border: none;
-  border-radius: vars.$rounded-md;
-  cursor: pointer;
-  transition: background-color vars.$transition-fast, transform vars.$transition-fast;
-  white-space: nowrap;
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+        transform: none !important;
+    }
 
-  &:hover:not(:disabled) {
-    background-color: vars.$color-primary-active;
-  }
+    &:hover:not(:disabled) {
+        transform: translateY(-1px);
+    }
 
-  &:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+    &:active:not(:disabled) {
+        transform: translateY(0) scale(0.98);
+    }
 }
 
-.button-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: vars.$color-surface-card;
-  color: vars.$color-ink;
-  font-size: 14px;
-  font-weight: 500;
-  height: 40px;
-  padding: 9px 17px;
-  border: 1px solid vars.$color-hairline-strong;
-  border-radius: vars.$rounded-md;
-  cursor: pointer;
-  transition: background-color vars.$transition-fast, border-color vars.$transition-fast, transform vars.$transition-fast;
-  white-space: nowrap;
+.btn {
+    @include button-base;
 
-  &:hover:not(:disabled) {
-    background-color: vars.$color-canvas-soft;
-    border-color: vars.$color-ink;
-  }
+    &.btn-primary {
+        background-color: var(--primary);
+        color: var(--on-primary);
 
-  &:active:not(:disabled) {
-    transform: scale(0.98);
-  }
+        &:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+        &:active:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+    }
+
+    &.btn-transparent {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+
+        &:hover:not(:disabled) {
+            color: var(--text-main);
+            background-color: var(--primary-faint);
+        }
+    }
+
+    &.btn-primary-transparent {
+        background: transparent;
+        border: none;
+        color: var(--primary);
+
+        &:hover:not(:disabled) {
+            color: var(--primary);
+            background-color: var(--primary-faint);
+        }
+    }
+
+    &.btn-auth-submit {
+        width: 100%;
+        background-color: var(--primary);
+        color: var(--on-primary);
+        border-radius: var(--border-radius);
+        padding: 14px 18px;
+
+        &:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+
+        &:active:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+    }
 }
 
-.button-danger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  color: vars.$color-error;
-  font-size: 14px;
-  font-weight: 500;
-  height: 40px;
-  padding: 9px 17px;
-  border: 1px solid vars.$color-error;
-  border-radius: vars.$rounded-md;
-  cursor: pointer;
-  transition: background-color vars.$transition-fast, color vars.$transition-fast, transform vars.$transition-fast;
-  white-space: nowrap;
-
-  &:hover:not(:disabled) {
-    background-color: vars.$color-error;
-    color: vars.$color-on-primary;
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}

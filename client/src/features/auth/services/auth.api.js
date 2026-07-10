@@ -1,48 +1,93 @@
 import axios from 'axios';
-import { API_BASE_URL } from '../../../app/runtime.config.js';
 
-// Central Axios client configured with withCredentials to support HTTP-Only cookies
-const authClient = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    withCredentials: true,
 });
 
-export const loginApi = async (email, password) => {
-  const response = await authClient.post('/api/auth/login', { email, password });
-  return response.data;
-};
+export async function register({ name, email, password }) {
+    try {
+        const response = await api.post('/api/auth/register', {
+            name,
+            email,
+            password,
+        });
 
-export const registerApi = async (name, email, password) => {
-  const response = await authClient.post('/api/auth/register', { name, email, password });
-  return response.data;
-};
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
 
-export const logoutApi = async () => {
-  const response = await authClient.post('/api/auth/logout');
-  return response.data;
-};
+export async function login({ email, password }) {
+    try {
+        const response = await api.post('/api/auth/login', {
+            email,
+            password,
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Login Failed');
+    }
+}
 
-export const getMeApi = async () => {
-  const response = await authClient.get('/api/auth/me');
-  return response.data;
-};
+export async function verifyEmail({ email, otp }) {
+    try {
+        const response = await api.post('/api/auth/verify-email', {
+            email,
+            otp,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
-export const updateProfileApi = async (name, email) => {
-  const response = await authClient.patch('/api/auth/profile', { name, email });
-  return response.data;
-};
+export async function resendOtp({ email }) {
+    try {
+        const response = await api.post('/api/auth/resend-otp', {
+            email,
+        });
 
-export const changePasswordApi = async (currentPassword, newPassword) => {
-  const response = await authClient.patch('/api/auth/change-password', { currentPassword, newPassword });
-  return response.data;
-};
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
-export const deleteAccountApi = async () => {
-  const response = await authClient.delete('/api/auth/account');
-  return response.data;
-};
+export async function requestPasswordReset({ email }) {
+    const response = await api.post('/api/auth/forgot-password', {
+        email,
+    });
 
+    return response.data;
+}
 
+export async function resetPassword({ email, otp, password, confirmPassword }) {
+    const response = await api.post('/api/auth/reset-password', {
+        email,
+        otp,
+        password,
+        confirmPassword,
+    });
+
+    return response.data;
+}
+
+export async function logout() {
+    try {
+        await api.post('/api/auth/logout');
+    } catch (err) {
+        console.error('Logout Failed', err);
+    }
+}
+
+export async function getMe() {
+    try {
+        const response = await api.get('/api/auth/get-me');
+        return response.data;
+    } catch (err) {
+        console.error('Failed to fetch user data', err);
+        return null;
+    }
+}

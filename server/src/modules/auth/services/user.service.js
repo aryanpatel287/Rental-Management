@@ -4,7 +4,7 @@ import {
     updateUser, 
     softDeleteUser, 
     listUsers 
-} from '../../../db/query/users.query.db.js';
+} from '../../../dao/user.dao.js';
 import { AppError } from '../utils/appError.js';
 
 /**
@@ -42,9 +42,9 @@ export async function changePassword(userId, { currentPassword, newPassword }) {
     }
 
     const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(newPassword, salt);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-    await updateUser(userId, { password: passwordHash });
+    await updateUser(userId, { password: hashedPassword });
 }
 
 /**

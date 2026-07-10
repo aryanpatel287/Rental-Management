@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import redis from '../../../config/cache.js';
-import { createUser, getUserByEmail } from '../../../db/query/users.query.db.js';
+import { createUser, getUserByEmail } from '../../../dao/user.dao.js';
 import { AppError } from '../utils/appError.js';
 import jwt from 'jsonwebtoken';
 
@@ -16,12 +16,12 @@ export async function register({ name, email, password }) {
     }
 
     const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await createUser({
         name,
         email,
-        password: passwordHash,
+        password: hashedPassword,
         role: 'USER',
         emailVerified: false,
         isActive: true,

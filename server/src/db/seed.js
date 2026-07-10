@@ -5,13 +5,13 @@ import { users } from './schema/users.schema.js';
 import { seedCrud } from '../modules/crud/seed/index.js';
 
 async function seedUsers() {
-    const passwordHash = await bcrypt.hash('password123', 10);
+    const hashedPassword = await bcrypt.hash('password123', 10);
 
     const seedUsers = [
         {
             name: 'Admin User',
             email: 'admin@example.com',
-            password: passwordHash,
+            password: hashedPassword,
             role: 'ADMIN',
             emailVerified: true,
             isActive: true,
@@ -20,7 +20,7 @@ async function seedUsers() {
         ...Array.from({ length: 10 }, (_, i) => ({
             name: `User ${i + 1}`,
             email: `user${i + 1}@example.com`,
-            password: passwordHash,
+            password: hashedPassword,
             role: 'USER',
             emailVerified: true,
             isActive: true,

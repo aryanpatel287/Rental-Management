@@ -1,0 +1,124 @@
+@use '../../shared/styles/mixins' as *;
+
+.form-group {
+    @include flex(flex-start, stretch, column, var(--space-2));
+    width: 100%;
+    position: relative;
+
+    .form-input {
+        width: 100%;
+        padding: var(--space-3) var(--space-4);
+        background-color: var(--bg-input);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        color: var(--text-main);
+        font-family: inherit;
+        font-size: var(--font-size-base);
+        box-shadow: inset 0 1px 2px rgba(31, 26, 55, 0.02);
+        transition: var(--transition-smooth);
+
+        &::placeholder {
+            color: transparent;
+            transition: var(--transition-smooth);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--bg-card);
+            box-shadow: 0 0 0 3px var(--primary-faint);
+
+            &::placeholder {
+                color: var(--text-muted);
+            }
+        }
+    }
+
+    .form-label {
+        position: absolute;
+        left: var(--space-4);
+        top: 22px;
+        transform: translateY(-50%);
+        font-size: var(--font-size-base);
+        font-weight: var(--font-weight-medium);
+        color: var(--text-muted);
+        background-color: var(--bg-card);
+        padding: 0 6px;
+        pointer-events: none;
+        transition: var(--transition-smooth);
+        border-radius: var(--rounded-pill);
+    }
+
+    .form-input:focus ~ .form-label,
+    .form-input:not(:placeholder-shown) ~ .form-label {
+        top: 0;
+        font-size: var(--font-size-caption);
+        font-weight: var(--font-weight-bold);
+        color: var(--primary);
+    }
+
+    .form-input:not(:focus):not(:placeholder-shown) ~ .form-label {
+        color: var(--text-muted);
+    }
+
+    &.has-password {
+        .form-input {
+            padding-right: 54px;
+        }
+    }
+
+    .password-toggle-btn {
+        position: absolute;
+        right: 12px;
+        top: 22px;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        border-radius: var(--rounded-pill);
+        transition: var(--transition-smooth);
+        z-index: 2;
+
+        &:hover {
+            color: var(--text-main);
+            background-color: var(--primary-faint);
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        svg {
+            display: block;
+        }
+    }
+
+    &.error {
+        .form-input {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px var(--danger-bg);
+
+            &:focus {
+                border-color: var(--danger);
+                box-shadow: 0 0 0 4px var(--danger-bg);
+            }
+        }
+
+        .form-label {
+            color: var(--danger) !important;
+        }
+    }
+
+    .form-error {
+        margin: 0;
+        color: var(--danger-dark);
+        font-size: var(--font-size-caption);
+        line-height: var(--line-height-caption);
+    }
+}
+
