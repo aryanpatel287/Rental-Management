@@ -1,8 +1,8 @@
-import * as cartRepo from './cart.repository.js';
-import * as pricingService from '../pricing/pricing.service.js';
-import { checkAvailability } from '../availability/services/availability.service.js';
-import { db } from '../../config/database.js';
-import { products, productVariants } from '../../db/schema/schema.js';
+import * as cartRepo from '../repository/cart.repository.js';
+import * as pricingService from '../../pricing/pricing.service.js';
+import { checkAvailability } from '../../availability/services/availability.service.js';
+import { db } from '../../../config/database.js';
+import { products, productVariants } from '../../../db/schema/schema.js';
 import { eq } from 'drizzle-orm';
 
 export async function getCart(customerId) {
@@ -116,7 +116,6 @@ export async function addItem(customerId, { productId, variantId, quantity, star
     // Get current items in cart to see if we can merge
     const { rows } = await cartRepo.getCartWithItems(customerId);
     
-    // Dates can be compared using start/end date time equivalence or ISO strings
     const duplicateRow = rows.find(r => 
         r.productId === productId &&
         r.variantId === variantId &&

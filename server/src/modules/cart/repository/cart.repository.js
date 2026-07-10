@@ -1,9 +1,9 @@
-import { db } from '../../config/database.js';
-import { carts, cartItems } from '../../db/schema/carts.schema.js';
-import { products } from '../../db/schema/products.schema.js';
-import { productVariants } from '../../db/schema/variants.schema.js';
-import { productImages } from '../../db/schema/product-images.schema.js';
-import { rentalRates } from '../../db/schema/rental-rates.schema.js';
+import { db } from '../../../config/database.js';
+import { carts, cartItems } from '../../../db/schema/carts.schema.js';
+import { products } from '../../../db/schema/products.schema.js';
+import { productVariants } from '../../../db/schema/variants.schema.js';
+import { productImages } from '../../../db/schema/product-images.schema.js';
+import { rentalRates } from '../../../db/schema/rental-rates.schema.js';
 import { eq, and, or, sql } from 'drizzle-orm';
 
 export async function findOrCreateCart(customerId) {
