@@ -10,6 +10,8 @@ import { categoryRouter } from './modules/category/index.js';
 import { productRouter } from './modules/product/index.js';
 import variantRouter from './modules/product/routes/variant.routes.js';
 import { attributeRouter } from './modules/attribute/index.js';
+import { inventoryRouter } from './modules/inventory/index.js';
+import { availabilityRouter } from './modules/availability/index.js';
 
 const app = express();
 
@@ -35,5 +37,7 @@ app.use('/api/categories', categoryRouter);
 app.use('/api/products', productRouter);
 app.use('/api/variants', variantRouter);
 app.use('/api/attributes', attributeRouter);
+app.use('/api/inventory', inventoryRouter);
+app.use('/api/reservations', availabilityRouter);
 
 export default app;

@@ -7,6 +7,10 @@ import { inventory } from './inventory.schema.js';
 import { rentalRates } from './rental-rates.schema.js';
 import { productImages } from './product-images.schema.js';
 import { attributes, attributeValues } from './attributes.schema.js';
+import { reservations } from './reservations.schema.js';
+import { auditLogs } from './audit-logs.schema.js';
+import { rentalOrders, rentalOrderItems } from './orders.schema.js';
+import { quotations, quotationItems } from './quotations.schema.js';
 
 export { 
     users, 
@@ -19,6 +23,13 @@ export {
     rentalRates,
     productImages,
     attributes,
-    attributeValues
+    attributeValues,
+    reservations,
+    auditLogs,
+    rentalOrders,
+    rentalOrderItems,
+    quotations,
+    quotationItems
 };
+
 

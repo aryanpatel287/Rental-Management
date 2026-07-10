@@ -9,11 +9,11 @@ This document is a comprehensive, zero-ambiguity integration guide for the entir
 The ERP Starter Kit is built on a modular, decoupled architecture consisting of a Node.js + Express backend and a Vite + React frontend.
 
 ### Tech Stack Blueprint
-*   **Frontend**: React (19.x), Vite (6.x), React Router (v7), Context API for state management, Vanilla SCSS for styling (complying with BEM conventions), Remix Icons, and Lucide React.
+*   **Frontend**: React (18+), Vite, React Router (v7), Context API for state management, Vanilla SCSS for styling (complying with BEM conventions), and Remix Icons for iconography.
 *   **Backend**: Node.js, Express.js (v5), Cookie-Parser, Cors, Morgan, and Express-Validator.
 *   **Database & ORM**: PostgreSQL, Drizzle ORM (for static schemas/metadata), Drizzle Kit (migration compiler), and pg (`node-postgres` Pool for dynamic runtime query execution).
 *   **Caching & Session Management**: Redis (`ioredis`) for token blacklisting, sliding window rate-limiting, and cache management.
-*   **Testing**: Integration test files (e.g., [crud.test.js](file:///media/shared/Code/hackathon-template/server/src/modules/crud/tests/crud.test.js)) configured for Jest and Supertest.
+*   **Testing**: Jest and Supertest (configured for ES modules).
 
 ---
 
@@ -29,44 +29,42 @@ To copy a feature (e.g., `crud`, `dashboard`, `auth`) to another codebase, you m
 
 ### Repository File Mapping
 ```txt
-/media/shared/Code/hackathon-template/
+d:\Code\testing-ai\
+├── .ai/                            # Repository Memory Context Directory
 ├── server/                         # Express Backend Server Root
 │   ├── drizzle/                    # Auto-generated Drizzle Kit sql migrations
-│   ├── drizzle.config.js           # Drizzle Kit configuration file
-│   ├── server.js                   # Database connect & listener initialization
 │   ├── src/
-│   │   ├── app.js                  # App startup and middleware configuration
+│   │   ├── app.js                  # App startup and route registry
+│   │   ├── server.js               # Database connect & listener initialization
 │   │   ├── config/                 # Centralized configuration (db, cache, envConfig)
-│   │   ├── dao/                    # Data Access Objects (users, etc.)
 │   │   ├── db/
 │   │   │   ├── migrate.js          # Migration runner script
 │   │   │   ├── seed.js             # User and database seeder script
-│   │   │   └── schema/             # Static database tables schemas registry
-│   │   │       ├── schema.js       # Central schema registry file
-│   │   │       └── users.schema.js # Drizzle schema for users
+│   │   │   ├── schema/             # Static database tables schemas registry
+│   │   │   │   ├── schema.js       # Central schema registry file
+│   │   │   │   └── users.schema.js # Drizzle schema for users
+│   │   │   └── query/              # Database read abstraction queries
+│   │   ├── middlewares/            # Application-level middlewares
 │   │   ├── modules/                # Self-contained backend feature modules
-│   │   │   ├── auth/               # Authentication, Session, and User updates (includes middleware/ & services/)
+│   │   │   ├── auth/               # Authentication, Session, and User updates
 │   │   │   ├── crud/               # Dynamic CRUD schema and query engine
 │   │   │   └── dashboard/          # Config-driven dashboard metadata services
-│   │   ├── services/               # Shared backend services
-│   │   ├── utils/                  # Shared utilities (responses, errors)
-│   │   └── validators/             # Shared request validation schemas
+│   │   └── utils/                  # Shared utilities (responses, errors)
 │   └── package.json
 └── client/                         # Vite + React Frontend Client Root
     ├── src/
-    │   ├── main.jsx                # Application React mount file
-    │   ├── App.jsx                 # RouterProvider config and AuthProvider wrapper
-    │   ├── app.routes.jsx          # Navigation route hierarchy
-    │   ├── index.scss              # Central Sass file
-    │   └── features/               # Self-contained frontend features
-    │       ├── admin/              # User management dashboard (Admin role required)
-    │       ├── auth/               # Login, Register, Profile, and Protected Routes
-    │       ├── crud/               # Auto-forms, Auto-tables, CRUD detail lists
-    │       ├── dashboard/          # Dynamic grid widgets container & renderers
-    │       └── shared/             # Shared elements (Sidebar, Navbar, Contexts) & global styles
-    │           └── styles/
-    │               ├── _variables.scss # CSS variables, HSL colors, design tokens
-    │               └── ...             # Other shared styles (buttons, mixins, etc.)
+    │   ├── main.jsx                # Application React mount file (AuthProvider wrapper)
+    │   ├── app/
+    │   │   ├── App.jsx             # RouterProvider configuration
+    │   │   ├── app.routes.jsx      # Navigation route hierarchy
+    │   │   ├── index.scss          # Central Sass file (feature styles registration)
+    │   │   └── _variables.scss     # CSS variables, HSL colors, design tokens
+    │   ├── features/               # Self-contained frontend features
+    │   │   ├── admin/              # User management dashboard (Admin role required)
+    │   │   ├── auth/               # Login, Register, Profile, and Protected Routes
+    │   │   ├── crud/               # Auto-forms, Auto-tables, CRUD detail lists
+    │   │   ├── dashboard/          # Dynamic grid widgets container & renderers
+    │   │   └── shared/             # Layout components (Sidebar, Navbar, Contexts)
     └── package.json
 ```
 
@@ -81,33 +79,38 @@ Create a `.env` file inside the `server/` directory:
 ```env
 SERVER_PORT=3000
 SERVER_URL=http://localhost:3000
-CLIENT_ORIGINS=http://localhost:5173
+CLIENT_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 
 # Database Connection (PostgreSQL)
-DATABASE_URL=postgresql://user:password@host:5432/database
+DATABASE_URL=postgresql://<username>:<password>@<host>:<port>/<dbname>?sslmode=require
 
 # JWT Token Signing Secret
-JWT_SECRET=your-jwt-secret-key
+JWT_SECRET=8f5b8a05c6d3eb84920fe8494b29b4e1837a4e69bdecf3a9f02930dbfe49ab3d
 
 # Redis Configuration
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASSWORD=your_redis_password
 
-# External Integrations (Gmail API keys for OTP verification)
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-GOOGLE_REFRESH_TOKEN=your-google-refresh-token
-GOOGLE_SENDER_EMAIL=your-email@example.com
+# External Integrations (Mandatory Validation Constraints)
+GOOGLE_CLIENT_ID=mock_google_client_id
+GOOGLE_CLIENT_SECRET=mock_google_client_secret
+GOOGLE_REFRESH_TOKEN=mock_google_refresh_token
+GOOGLE_SENDER_EMAIL=noreply@example.com
 
-# ImageKit Configuration
-IMAGEKIT_PRIVATE_KEY=your-imagekit-private-key
+MJ_APIKEY_PUBLIC=mock_mailjet_public_key
+MJ_APIKEY_PRIVATE=mock_mailjet_private_key
+MJ_USER=noreply@example.com
+
+IMAGEKIT_PRIVATE_KEY=mock_imagekit_private_key
 ```
 
 ### 3.2 Client Configuration
-Vite uses `.env` files to fetch config values. Ensure that `VITE_API_URL` inside the [client/.env](file:///media/shared/Code/hackathon-template/client/.env) file points to the server url:
-```env
-VITE_API_URL=http://localhost:3000
+Vite uses [runtime.config.js](file:///d:/Code/testing-ai/client/src/app/runtime.config.js) or `.env` files to fetch config values. Ensure backend connection URLs point to Port 3000:
+```javascript
+window.ENV = {
+  API_URL: 'http://localhost:3000/api',
+};
 ```
 
 ---
@@ -126,27 +129,23 @@ graph TD
 ```
 
 ### 4.1 Schema Setup
-1. **Static Tables**: Handled via Drizzle schemas (e.g. `users`, `entity_definitions`, `field_definitions`). Registry: [schema.js](file:///media/shared/Code/hackathon-template/server/src/db/schema/schema.js).
+1. **Static Tables**: Handled via Drizzle schemas (e.g. `users`, `entity_definitions`, `field_definitions`). Registry: [schema.js](file:///d:/Code/testing-ai/server/src/db/schema/schema.js).
 2. **Dynamic Tables**: Named as `crud_{entity_slug}` (e.g., `crud_product`, `crud_lead`). They are created, altered, and dropped using the `table-manager.service.js` using strict sanitize checks (regex: `/^[a-zA-Z_][a-zA-Z0-9_]*$/`) to prevent SQL Injection.
 
 ### 4.2 Database Execution Commands
 Run these commands from the `server/` directory:
 
-*   **Generate Migrations**: Compile schemas from `server/src/db/schema/schema.js` into SQL scripts inside `server/drizzle/`:
+*   **Generate Migrations**: Compile schemas from `server/src/db/schema/schema.js` into sql scripts inside `server/drizzle/`:
     ```bash
-    npx drizzle-kit generate
+    npm run db:generate
     ```
 *   **Run Migrations**: Apply Drizzle SQL scripts to PostgreSQL:
     ```bash
-    node src/db/migrate.js
+    npm run db:migrate
     ```
 *   **Seed Database**: Populates database with default users (Admin + Users) and initial dynamic CRUD structures (Products + Leads):
     ```bash
-    node src/db/seed.js
-    ```
-*   **Drizzle Studio**: Launch the database administration dashboard:
-    ```bash
-    npx drizzle-kit studio
+    npm run db:seed
     ```
 
 ---
@@ -182,16 +181,18 @@ This module manages secure session validation, role gates, user profile manageme
     ```json
     {
       "success": true,
-      "message": "User registered successfully.",
-      "user": {
-        "id": "59a8b662-4d80-4df0-b672-9a2a9b43aad7",
-        "name": "Jane Doe",
-        "email": "jane.doe@example.com",
-        "role": "USER",
-        "isActive": true,
-        "emailVerified": false,
-        "createdAt": "2026-06-09T20:59:33.140Z",
-        "updatedAt": "2026-06-09T20:59:33.140Z"
+      "message": "User registered successfully",
+      "data": {
+        "user": {
+          "id": "59a8b662-4d80-4df0-b672-9a2a9b43aad7",
+          "name": "Jane Doe",
+          "email": "jane.doe@example.com",
+          "role": "USER",
+          "isActive": true,
+          "emailVerified": false,
+          "createdAt": "2026-06-09T20:59:33.140Z",
+          "updatedAt": "2026-06-09T20:59:33.140Z"
+        }
       }
     }
     ```
@@ -206,26 +207,10 @@ This module manages secure session validation, role gates, user profile manageme
       "password": "strongpassword123"
     }
     ```
-*   **Response (200 OK)**:
-    ```json
-    {
-      "success": true,
-      "message": "Login successful.",
-      "user": {
-        "id": "59a8b662-4d80-4df0-b672-9a2a9b43aad7",
-        "name": "Jane Doe",
-        "email": "jane.doe@example.com",
-        "role": "USER",
-        "isActive": true,
-        "emailVerified": false,
-        "createdAt": "2026-06-09T20:59:33.140Z",
-        "updatedAt": "2026-06-09T20:59:33.140Z"
-      }
-    }
-    ```
+*   **Response (200 OK)**: (Same structure as Registration success).
 
 ##### Get Current User Profile
-*   **Endpoints**: `GET /api/auth/me` or `GET /api/auth/get-me`
+*   **Endpoint**: `GET /api/auth/me`
 *   **Headers**: `Cookie: token=<jwt_token>`
 *   **Response (200 OK)**:
     ```json
@@ -254,7 +239,7 @@ This module manages secure session validation, role gates, user profile manageme
     ```json
     {
       "success": true,
-      "message": "Logout successful."
+      "message": "User logged out successfully"
     }
     ```
 
@@ -413,33 +398,15 @@ Use standard REST paradigms mapping directly to the configured slug:
 A layout orchestration module fetching configured layout blueprints for different roles and mounting corresponding visual blocks.
 
 #### A. Configuration Blueprint (Server Defaults)
-Configurations map roles to widget blocks containing size dimensions (`w` and `h` spans in the 12-column responsive layout grid) and settings endpoints. File location: [dashboards.js](file:///media/shared/Code/hackathon-template/server/src/modules/dashboard/config/dashboards.js).
+Configurations map roles to widget blocks containing size dimensions (`w` and `h` spans in the 12-column responsive layout grid) and settings endpoints. File location: [dashboards.js](file:///d:/Code/testing-ai/server/src/modules/dashboard/config/dashboards.js).
 ```javascript
 export const dashboardConfigs = {
   ADMIN: [
-    {
-      id: 'stat-users',
-      widgetType: 'stats-card',
-      w: 4,
-      h: 1,
-      settings: { title: 'Platform Users', count: 11, icon: 'ri-user-line', badgeText: 'Active', badgeType: 'success' }
-    },
-    {
-      id: 'sales-chart',
-      widgetType: 'chart',
-      w: 8,
-      h: 3,
-      settings: { title: 'Monthly Performance Metric', type: 'line', labels: ['Jan', 'Feb', 'Mar'], data: [12000, 19000, 32000] }
-    }
+    { id: 'stat-users', widgetType: 'stats-card', w: 4, h: 1, settings: { title: 'Users count', count: 11, icon: 'ri-user-line' } },
+    { id: 'sales-chart', widgetType: 'chart', w: 8, h: 3, settings: { title: 'Sales Performance', type: 'line', labels: ['Jan', 'Feb'], data: [1000, 2000] } }
   ],
   USER: [
-    {
-      id: 'stat-products',
-      widgetType: 'stats-card',
-      w: 6,
-      h: 1,
-      settings: { title: 'Total Products', endpoint: '/api/crud/product', icon: 'ri-box-3-line', badgeText: 'Inventory', badgeType: 'info' }
-    }
+    { id: 'stat-products', widgetType: 'stats-card', w: 12, h: 1, settings: { title: 'Product Inventory', endpoint: '/api/crud/product' } }
   ]
 };
 ```
@@ -474,7 +441,7 @@ export default AuditLogWidget;
 ```
 
 ##### Step 2: Register in Client Registry
-Open [WidgetRegistry.jsx](file:///media/shared/Code/hackathon-template/client/src/features/dashboard/components/WidgetRegistry.jsx), import the component, and map it to a type identifier string:
+Open [WidgetRegistry.jsx](file:///d:/Code/testing-ai/client/src/features/dashboard/components/WidgetRegistry.jsx), import the component, and map it to a type identifier string:
 ```javascript
 import AuditLogWidget from './widgets/AuditLogWidget.jsx';
 
@@ -485,7 +452,7 @@ const registry = {
 ```
 
 ##### Step 3: Insert into Server configuration Layouts
-Open [dashboards.js](file:///media/shared/Code/hackathon-template/server/src/modules/dashboard/config/dashboards.js) and append the widget to the desired role arrays:
+Open [dashboards.js](file:///d:/Code/testing-ai/server/src/modules/dashboard/config/dashboards.js) and append the widget to the desired role arrays:
 ```javascript
 {
   id: 'activity-audit',
@@ -526,3 +493,15 @@ flowchart TD
 #### `ReactContextApiAgent`
 *   **Focus Scope**: React views structure, layout templates, Context state management, custom async hooks, Vite proxy connections, page routing, and SCSS modules (Sass stylesheets hierarchy).
 *   **Directory Boundary**: Limit code changes strictly to `client/` and `client/src/`.
+
+### 6.2 Repository Memory Protocol (`.ai/` directory)
+To optimize LLM context usage, agents do not read the entire chat log history. They consult the persistent markdown context files in `.ai/`:
+1.  **`PROJECT_CONTEXT.md`**: Master repository architecture context.
+2.  **`CURRENT_SPRINT.md`**: Current development objectives checklist.
+3.  **`HANDOFF.md`**: Synchronization notes written by agents when ending tasks (detailing structural edits, routes added, and components exported).
+4.  **`API_CONTRACTS.md` / `API_RESPONSE.md`**: REST route inputs, query shapes, and returns format definitions.
+
+**Agent Execution Rules**:
+*   Always inspect `.ai/CURRENT_SPRINT.md` and appropriate context files before editing code.
+*   When changing route behaviors or adding endpoints, immediately document them in `.ai/API_CONTRACTS.md`.
+*   Upon completing a sub-phase, write clear handoff notes in `.ai/HANDOFF.md` for subsequent agent processes.
