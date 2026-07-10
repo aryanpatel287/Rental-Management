@@ -15,6 +15,34 @@
       "when": 1783691999969,
       "tag": "0001_tough_scrambler",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783701234567,
+      "tag": "0002_add_categories",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783702345678,
+      "tag": "0003_add_products",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783702445678,
+      "tag": "0004_add_product_images",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783702545678,
+      "tag": "0005_add_attributes",
+      "breakpoints": true
     }
   ]
 }
