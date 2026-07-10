@@ -7,6 +7,7 @@ import { authRouter } from './modules/auth/index.js';
 import { crudRouter } from './modules/crud/index.js';
 import { dashboardRouter } from './modules/dashboard/index.js';
 import { categoryRouter } from './modules/category/index.js';
+import { productRouter } from './modules/product/index.js';
 
 const app = express();
 
@@ -29,5 +30,6 @@ app.use('/api/auth', authRouter);
 app.use('/api/crud', crudRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/categories', categoryRouter);
+app.use('/api/products', productRouter);
 
 export default app;
