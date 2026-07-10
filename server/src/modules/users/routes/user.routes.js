@@ -8,13 +8,13 @@ const router = Router();
 // Protect all routes in User Module
 router.use(protect);
 
-// Self endpoints
-router.patch('/profile', updateProfileValidator, userController.updateProfile);
-router.get('/:id', userController.getUserById);
-
 // Vendor/Customer queries
 router.get('/vendors', userController.getVendors);
 router.get('/customers', restrictTo('ADMIN', 'VENDOR'), userController.getCustomers);
+
+// Self endpoints
+router.patch('/profile', updateProfileValidator, userController.updateProfile);
+router.get('/:id', userController.getUserById);
 
 // Administrative endpoints (Admin only)
 router.use(restrictTo('ADMIN'));
