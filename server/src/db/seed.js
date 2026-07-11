@@ -2,12 +2,12 @@ import 'dotenv/config';
 import bcrypt from 'bcryptjs';
 import { db, pool } from '../config/database.js';
 import { users } from './schema/users.schema.js';
-import { seedCrud } from '../modules/crud/seed/index.js';
+import { userProfiles } from './schema/user_profiles.schema.js';
 
 async function seedUsers() {
     const hashedPassword = await bcrypt.hash('password123', 10);
 
-    const seedUsers = [
+    const seedUsersData = [
         {
             name: 'Admin User',
             email: 'admin@example.com',
@@ -35,8 +35,19 @@ async function seedUsers() {
             return;
         }
 
-        await db.insert(users).values(seedUsers).returning();
-        console.log(`Seeded ${seedUsers.length} users successfully`);
+        const insertedUsers = await db.insert(users).values(seedUsersData).returning();
+        console.log(`Seeded ${insertedUsers.length} users successfully`);
+
+        const profiles = insertedUsers.map((user) => ({
+            userId: user.id,
+            phone: '+919876543210',
+            companyName: user.role === 'ADMIN' ? 'Admin Corp' : `User ${user.name} Company`,
+            gstin: '22AAAAA0000A1Z5',
+            avatar: null,
+        }));
+
+        await db.insert(userProfiles).values(profiles);
+        console.log('Seeded matching user profiles successfully');
     } catch (error) {
         console.error('Error seeding users:', error);
         process.exit(1);
@@ -45,12 +56,6 @@ async function seedUsers() {
 
 async function main() {
     await seedUsers();
-    try {
-        await seedCrud();
-        console.log('Seeded CRUD entities and records successfully');
-    } catch (err) {
-        console.error('Error seeding CRUD:', err);
-    }
     await pool.end();
     process.exit(0);
 }

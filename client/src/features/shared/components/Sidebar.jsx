@@ -1,33 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router';
 import { useAuth } from '../../auth/hooks/useAuth.js';
-import { getDefinitionsApi } from '../../crud/services/crud.api.js';
 
-/**
- * Sidebar navigation component
- */
 const Sidebar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
-    const [entities, setEntities] = useState([]);
-
-    useEffect(() => {
-        const fetchEntities = async () => {
-            try {
-                if (user) {
-                    const res = await getDefinitionsApi();
-                    if (res.success) {
-                        setEntities(res.data.entities || []);
-                    }
-                }
-            } catch (err) {
-                console.error('Failed to load sidebar entities:', err);
-            }
-        };
-        fetchEntities();
-    }, [user]);
 
     const handleLogout = async () => {
         await logout();
@@ -128,37 +107,7 @@ const Sidebar = () => {
                         </Link>
                     )}
 
-                    {entities.length > 0 && (
-                        <>
-                            <div
-                                style={{
-                                    height: '1px',
-                                    backgroundColor:
-                                        'var(--color-hairline, #f0f0f3)',
-                                    margin: '12px 8px',
-                                }}
-                            />
-                            {entities.map((ent) => (
-                                <Link
-                                    key={ent.slug}
-                                    to={`/crud/${ent.slug}`}
-                                    className={`sidebar__link ${isActive(`/crud/${ent.slug}`) ? 'sidebar__link--active' : ''}`}
-                                    onClick={closeSidebar}
-                                    aria-current={
-                                        isActive(`/crud/${ent.slug}`)
-                                            ? 'page'
-                                            : undefined
-                                    }
-                                >
-                                    <i
-                                        className="ri-database-2-line"
-                                        aria-hidden="true"
-                                    />
-                                    <span>{ent.name}</span>
-                                </Link>
-                            ))}
-                        </>
-                    )}
+
                 </nav>
 
                 {/* User profile and actions */}

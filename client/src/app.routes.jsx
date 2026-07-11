@@ -8,8 +8,6 @@ import HomePage from './features/shared/pages/HomePage';
 import ProtectedRoute from './features/auth/components/ProtectedRoute';
 
 import DashboardPage from './features/dashboard/pages/DashboardPage';
-import CrudListPage from './features/crud/pages/CrudListPage';
-import CrudFormPage from './features/crud/pages/CrudFormPage';
 import { AdminProvider } from './features/admin/AdminContext';
 import AdminDashboardPage from './features/admin/pages/AdminDashboardPage';
 import DashboardLayout from './features/shared/components/DashboardLayout';
@@ -30,18 +28,6 @@ export const router = createBrowserRouter([
             {
                 path: 'dashboard',
                 element: <DashboardPage />,
-            },
-            {
-                path: 'crud/:entity',
-                element: <CrudListPage />,
-            },
-            {
-                path: 'crud/:entity/new',
-                element: <CrudFormPage />,
-            },
-            {
-                path: 'crud/:entity/:id/edit',
-                element: <CrudFormPage />,
             },
             {
                 path: 'admin/users',

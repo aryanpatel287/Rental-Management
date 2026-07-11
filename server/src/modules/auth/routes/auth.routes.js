@@ -1,14 +1,11 @@
 import { Router } from 'express';
 import * as authController from '../controllers/auth.controller.js';
-import * as userController from '../controllers/user.controller.js';
-import { protect, restrictTo, rateLimiter } from '../middleware/auth.middleware.js';
+import { protect, rateLimiter } from '../middleware/auth.middleware.js';
 import { 
     registerValidator, 
     loginValidator, 
-    updateProfileValidator, 
     changePasswordValidator, 
-    updateRoleValidator,
-    forgotPasswordValidator,
+    forgotPasswordValidator, 
     resetPasswordValidator
 } from '../validators/auth.validator.js';
 
@@ -28,18 +25,9 @@ router.post('/logout', authController.logout);
 // Authenticated Routes
 router.use(protect);
 
-router.get('/me', userController.getMe);
-router.get('/get-me', userController.getMe);
-router.patch('/profile', updateProfileValidator, userController.updateProfile);
-router.patch('/change-password', changePasswordValidator, userController.changePassword);
-router.delete('/account', userController.deleteAccount);
-
-// Admin Only Routes
-router.use(restrictTo('ADMIN'));
-
-router.get('/users', userController.adminListUsers);
-router.get('/users/:id', userController.adminGetUserById);
-router.patch('/users/:id/role', updateRoleValidator, userController.adminUpdateRole);
-router.delete('/users/:id', userController.adminDeleteUser);
+router.get('/me', authController.getMe);
+router.get('/get-me', authController.getMe);
+router.patch('/change-password', changePasswordValidator, authController.changePassword);
 
 export default router;
+
